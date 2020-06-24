@@ -2,14 +2,13 @@ const client = require('./../lib/bot.js').client;
 
 const games = [
   'king poring !card !poring !nolan',
-  // 'judi mora',
-  // 'judi hollgrehenn',
   'event !reminder',
   'farming devil wing !smvp',
   'tangkap tangkap !pet',
   'GB ET dong !et',
   'Endless Tower !et',
-  'Valhalla Ruins !vr'
+  'Valhalla Ruins !vr',
+  'ora nm tuyul -1 !oracle'
 ]
 
 function setRandomGame(){

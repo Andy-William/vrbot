@@ -1,4 +1,3 @@
-// https://glitch.com/faq#restrictions 
 // call own endpoint every 4 minutes to prevent sleeping
 
 module.exports = function(app){

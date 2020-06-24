@@ -6,7 +6,7 @@ async function odds(){
   const common = await db.count('cards', {nolan: 4})*4;
   const total = rare+common;
   this.odds = [rare/total, common/total];
-  console.log(this.odds)
+  // console.log(this.odds)
   return this.odds
 }
 

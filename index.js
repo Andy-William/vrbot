@@ -15,33 +15,21 @@ client.on('message', (message) => {
       msg = err;
     }
     message.reply(msg||'ada error, coba lagi aja');
-    client.channels.get('555311795771015193').send(log);
-    client.channels.get('555311795771015193').send(msg);
+    client.channels.get(process.env.DEV_CHANNEL_ID).send(log);
+    client.channels.get(process.env.DEV_CHANNEL_ID).send(msg);
   }
   
   try{
     console.log(log)
     // pamernoko
-    if( message.channel.id == 613978055936835594 ){
+    if( message.channel.id == process.env.PAMERNOKO_CHANNEL_ID ){
       if( message.author.bot || !message.attachments.first() ) message.delete();
       else{
         message.react('👍').then(() => message.react('❤️')).then(() => message.react('😆')).then(() => message.react('😮')).then(() => message.react('😢')).then(() => message.react('😡'))
       }
       return;
     }
-    // 4th enchant
-    if( message.channel.id == 605011135971721247 && message.author.id == 605011187855392794 ){
-      message.react('595835515736031242').then(() => message.react('575325328105406475'));
-      if( message.embeds[0].description && message.embeds[0].description.match(/tenacity/i) ){
-        message.guild.members.get("169080799079956481").send(message.embeds[0].description);
-      }
-    }
-    // if( message.author.id == '366205602550251520' && message.channel.id == 545944691791757312 ){
-    //   try{
-    //     message.delete()
-    //   }
-    //   catch(err){console.log(err)    }
-    // }
+
     if( message.author.bot ) return;
     if ( message.content.startsWith(prefix) ){
       const args = message.content.slice(1).split(/ +/); // split arguments
@@ -70,8 +58,8 @@ client.on('message', (message) => {
       msg = err;
     }
     message.reply(msg||'ada error, coba lagi aja');
-    client.channels.get('555311795771015193').send(log);
-    client.channels.get('555311795771015193').send(msg);
+    client.channels.get(process.env.DEV_CHANNEL_ID).send(log);
+    client.channels.get(process.env.DEV_CHANNEL_ID).send(msg);
   }
 });
 
@@ -82,6 +70,4 @@ client.login(process.env.DISCORD_BOT_TOKEN).then(()=>{
 
 client.on('error', (err) => console.error(err));
 
-require('./unsleeper.js');
-require('./unsleeper.js');
 require('./web.js');
