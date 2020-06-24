@@ -1,0 +1,259 @@
+<html>
+  <head>
+    <title>design test</title>
+    
+  </head>
+  <body bgcolor="#545763">
+    <h1 id="title">
+      et
+    </h1>
+    <table>
+      <tr>
+        <td>
+          titleSize: <input type="text" id="titleSize" value="40"><br>
+          headerSize: <input type="text" id="headerSize" value="30"><br>
+          channelSize: <input type="text" id="channelSize" value="80"><br>
+          horizontalBuffer: <input type="text" id="horizontalBuffer" value="5"><br>
+          verticalBuffer: <input type="text" id="verticalBuffer" value="5"><br>
+          imageSize: <input type="text" id="imageSize" value="50"><br>
+          footerSize: <input type="text" id="footerSize" value="20"><br>      
+        </td>
+        <td>
+          font judul: <input type="text" id="titlefont" value="28px roboto"><br>
+          warna text: <input type="text" id="titlefillStyle" value="#FFFFFF"><br>
+          judulnya: <input type="text" id="titlefillText" value="Endless Tower loh"><br>
+          tebal border: <input type="text" id="borderWidth" value="2"><br>
+          warna border: <input type="text" id="borderColor" value="#A0B0C0"><br>
+          font selain judul: <input type="text" id="otherfont" value="20px roboto"><br>
+          font footer: <input type="text" id="footerfont" value="14px roboto"><br>
+          
+        </td>
+      </tr>
+    </table>
+    <button id="refresh"> refresh</button>
+    <br>
+
+    <canvas id="et" style="border:1px solid #000000;">
+    </canvas>
+    
+  <script>
+    assets = { angeling:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fangeling.png?time=1570187542895',
+  bloody_knight:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fbloody_knight.png?time=1570187542895',
+  arc_angeling:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Farc_angeling.png?time=1570187542895',
+  atroce:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fatroce.png?time=1570187542895',
+  'bloody-murderer':
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fbloody_murderer.png?time=1570187542895',
+  baphomet:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fbaphomet.png?time=1570187542895',
+  dark_lord:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fdark_lord.png?time=1570187542875',
+  detale:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fdetarderous.png?time=1570187542895',
+  deviling:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fdeviling.png?v=1570210590698',
+  doppelganger:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fdoppelganger.png?time=1570187542895',
+  drake:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fdrake.png?time=1570187542875',
+  eddga:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Feddga.png?time=1570187542895',
+  firelord_kaho:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Ffirelord_kaho.png?time=1570187542895',
+  garm:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fgarm.png?time=1570187542895',
+  goblin_king:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fgoblin_leader.png?time=1570187542895',
+  golden_bug:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fgolden_thief_bug.png?time=1570187542895',
+  kobold_leader:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fkobold_leader.png?time=1570187542895',
+  'lord-of-the-dead':
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Flord_of_death.png?time=1570187542895',
+  maya:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fmaya.png?time=1570187542875',
+  mistress:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fmistress.png?v=1570210590781',
+  orc_hero:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Forc_hero.png?time=1570187542875',
+  orc_lord:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Forc_lord.png?time=1570187542894',
+  osiris:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fosiris.png?time=1570187542894',
+  owl_baron:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fowl_baron.png?time=1570187542894',
+  phreeoni:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fphreeoni.png?time=1570187542894',
+  spashire:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fspashire.png?time=1570187542894',
+  stormy_knight:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fstormy_knight.png?time=1570187542894',
+  strouf:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fstrouf.png?time=1570187542895',
+  timeholder:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Ftime_holder.png?time=1570187542895',
+  'question_mark-50x50':
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fquestion_mark-50x50.png?time=1570187542864',
+  loli_ruri:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Floli_ruri.png?time=1570187542864',
+  clock_tower_manager:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fclock_tower_manager.png?time=1570187542864',
+  flute_player:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fflute_player.png?time=1570187542864',
+  fire_witch:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Ffire_witch.png?time=1570187542873',
+  clock:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fclock.png?time=1570187542873',
+  chepet:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fchepet.png?time=1570187542873',
+  dark_illusion:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fdark_illusion.png?time=1570187542873',
+  mysteltainn:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fmysteltainn.png?time=1570187542873',
+  zherlthsh:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fzherlthsh.png?time=1570187542873',
+  alice:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Falice.png?time=1570187542874',
+  owl_duke:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fowl_duke.png?time=1570187542874',
+  rafflesia:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Frafflesia.png?time=1570187542874',
+  mutant_dragon:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fmutant_dragon.png?time=1570187542874',
+  jakk:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fjakk.png?time=1570187542874',
+  orc_baby:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Forc_baby.png?time=1570187542874',
+  hyegun:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fhyegun.png?time=1570187542874',
+  anubis:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fanubis.png?time=1570187542874',
+  gryphon:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fgryphon.png?time=1570187542874',
+  wood_goblin:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fwood_goblin.png?time=1570187542874',
+  vagabond_wolf:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fvagabond_wolf.png?time=1570187542874',
+  dragonfly:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fdragonfly.png?time=1570187542874',
+  rotar_zairo:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Frotar_zairo.png?time=1570187542874',
+  toad:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Ftoad.png?time=1570187542874',
+  ghostring:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fghostring.png?time=1570187542874',
+  vocal:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fvocal.png?time=1570187542874',
+  mastering:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fmastering.png?time=1570187542874',
+  eclipse:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Feclipse.png?time=1570187542874',
+  smokie:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fsmokie.png?time=1570187542874',
+  'wolf-grandma':
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fwolf_grandma.png?time=1570187542895',
+  doppleganger:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fdoppleganger.png?time=1570187542875',
+  moonlight:
+   'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fmoonlight_flower.png?v=1570210590466' }
+  
+    let canvasAssets = {}
+  function getClosestName(name){
+    if( assets[name] ) return assets[name];
+    return 'https://cdn.glitch.com/48c7ed45-371e-47bc-b3cd-bbf3cb69a60a%2Fquestion_mark-50x50.png';
+  }
+function loadImage(url) {
+  return new Promise(r => { let i = new Image(); i.onload = (() => r(i)); i.src = url; });
+}
+  async function getCanvas(name){
+    const url = getClosestName(name);
+    if( !canvasAssets[url] ){
+      canvasAssets[url] = await loadImage(getClosestName(name));
+    }
+    console.log(url)
+    return canvasAssets[url];
+  }
+    
+    document.getElementById('refresh').onclick = async function(){
+        const type = 'mvp'
+        const data = JSON.parse('{"bosses":{"0":[["deviling"],["deviling"],["strouf"],["mistress"],["osiris","kobold_leader"],["eddga","atroce"],["atroce","atroce"],["detale","stormy_knight"],["timeholder","bloody-murderer"],["dark_lord","stormy_knight","firelord_kaho"]],"1":[["golden_bug"],["drake"],["maya"],["phreeoni"],["orc_hero","osiris"],["kobold_leader","kobold_leader"],["orc_lord","orc_lord"],["dark_lord","spashire"],["dark_lord","spashire"],["stormy_knight","bloody-murderer","lord-of-the-dead"]],"2":[["deviling"],["angeling"],["strouf"],["phreeoni"],["eddga","atroce"],["eddga","kobold_leader"],["orc_hero","detale"],["atroce","dark_lord"],["stormy_knight","wolf-grandma"],["bloody_knight","bloody-murderer","arc_angeling"]],"3":[["angeling"],["deviling"],["goblin_king"],["mistress"],["osiris","eddga"],["osiris","osiris"],["atroce","orc_lord"],["orc_hero","arc_angeling"],["owl_baron","lord-of-the-dead"],["baphomet","baphomet","arc_angeling"]],"4":[["angeling"],["deviling"],["mistress"],["strouf"],["orc_hero","atroce"],["kobold_leader","kobold_leader"],["orc_hero","detale"],["orc_lord","firelord_kaho"],["owl_baron","detale"],["dark_lord","timeholder","firelord_kaho"]],"5":[["angeling"],["deviling"],["mistress"],["strouf"],["orc_hero","kobold_leader"],["eddga","kobold_leader"],["orc_hero","owl_baron"],["atroce","baphomet"],["dark_lord","firelord_kaho"],["garm","bloody-murderer","arc_angeling"]],"6":[["angeling"],["angeling"],["maya"],["goblin_king"],["eddga","moonlight"],["orc_hero","moonlight"],["orc_lord","detale"],["kobold_leader","baphomet"],["lord-of-the-dead","arc_angeling"],["bloody_knight","dark_lord","lord-of-the-dead"]],"7":[["golden_bug"],["golden_bug"],["mistress"],["maya"],["eddga","eddga"],["orc_hero","kobold_leader"],["orc_lord","owl_baron"],["owl_baron","bloody_knight"],["spashire","baphomet"],["stormy_knight","stormy_knight","lord-of-the-dead"]],"8":[["deviling"],["angeling"],["maya"],["strouf"],["orc_hero","moonlight"],["kobold_leader","kobold_leader"],["atroce","owl_baron"],["garm","arc_angeling"],["bloody_knight","garm"],["baphomet","firelord_kaho","arc_angeling"]],"9":[["angeling"],["angeling"],["strouf"],["phreeoni"],["orc_hero","orc_hero"],["eddga","kobold_leader"],["atroce","owl_baron"],["detale","spashire"],["spashire","garm"],["wolf-grandma","wolf-grandma","bloody-murderer"]]},"updated":"30/9/19","source":"https://www.hdgames.net/boss.php"}')
+        const entries = Object.entries(data.bosses);
+        const titleSize = document.getElementById('titleSize').value-0;  // tulisan judul yang di atas
+        const headerSize = document.getElementById('headerSize').value-0;   // ukuran row header
+        const channelSize = document.getElementById('channelSize').value-0;   // ukuran column paling kiri yang tulisan channel
+        const horizontalBuffer = document.getElementById('horizontalBuffer').value-0;   // jarak dari gambar ke garis batas kolom
+        const verticalBuffer = document.getElementById('verticalBuffer').value-0;   // jarak dari gambar ke garis batas row
+        const imageSize = document.getElementById('imageSize').value-0;   // ukuran gambar
+        const footerSize = document.getElementById('footerSize').value-0;  // footer
+
+        const canvas = document.getElementById('et');
+        et.width = channelSize + entries[0][1].length*horizontalBuffer*2 + entries[0][1].flat().length*imageSize
+        et.height = entries.length*(imageSize+verticalBuffer*2) + titleSize + headerSize + footerSize
+        const ctx = canvas.getContext('2d');
+
+        ctx.font = document.getElementById('titlefont').value;
+        ctx.fillStyle = document.getElementById('titlefillStyle').value;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(document.getElementById('titlefillText').value, canvas.width/2, titleSize/2);
+
+        ctx.beginPath();
+        ctx.lineWidth = document.getElementById('borderWidth').value;
+        ctx.strokeStyle = document.getElementById('borderColor').value;
+        ctx.moveTo(0, titleSize+headerSize);
+        ctx.lineTo(canvas.width, titleSize+headerSize);
+        ctx.stroke();
+
+        ctx.font = document.getElementById('otherfont').value;
+        let offset = channelSize;
+        for( let i=0 ; i<entries[0][1].length ; i++ ){
+          ctx.beginPath();
+          ctx.moveTo(offset, titleSize);
+          ctx.lineTo(offset, canvas.height-footerSize);
+          ctx.stroke();
+          const columnLength = (entries[0][1][i].length*imageSize)+2*horizontalBuffer;
+          ctx.fillText((type=='mvp'?10+i*10:i%2*3+3+(i>>1)*10)+'F', offset+columnLength/2, titleSize+headerSize/2);
+          offset += columnLength;
+        }
+
+        for( let i=0 ; i< entries.length ; i++ ){
+          const [channel, floor] = entries[i];
+          ctx.fillText('CH' + channel, channelSize/2, titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize) + imageSize/2  )
+
+          ctx.beginPath();
+          ctx.moveTo(0, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize));
+          ctx.lineTo(canvas.width, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize));
+          ctx.stroke();
+
+          let offset = channelSize;
+          for( let j=0 ; j<floor.length ; j++ ){
+            const bosses = floor[j];
+            offset += horizontalBuffer;
+            for( let k=0 ; k<bosses.length ; k++ ){
+              ctx.drawImage(
+                await getCanvas(bosses[k]),
+                offset,
+                titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize),
+                imageSize,
+                imageSize
+              );
+              offset += imageSize;
+            }
+            offset += horizontalBuffer;
+          }
+        }
+
+        ctx.font = document.getElementById('footerfont').value;
+        ctx.textBaseline = 'bottom';
+        ctx.textAlign = 'left';
+        ctx.fillText('Updated ' + data.updated, 0, canvas.height);
+
+        ctx.textAlign = 'right';
+        ctx.fillText('Source: ' + data.source, canvas.width, canvas.height);
+      }
+    </script>
+  </body>
+</html>
