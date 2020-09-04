@@ -3,36 +3,30 @@ const Canvas = require('canvas');
 const Discord = require('discord.js');
 const fs = require('fs');
 const md5 = require('md5');
-const assets = require('./../lib/assets.js')
-const db = require('./../lib/mongo.js');
+const assets = require('./../lib/assets.js');
+const tabletojson = require('tabletojson').Tabletojson;
 
-const mvpUrl = 'https://www.hdgames.net/boss.php'
-const miniUrl = 'https://www.hdgames.net/mini.php'
+const etUrl = 'https://docs.google.com/spreadsheets/d/11AilkJ0Kn66TUOXwjQ2O9iNzk6A_TLLuZk8nTX2Zckk/htmlview'
+const creditUrl = 'https://spiriusgaming.com/et-list.html'
 const cacheDirectory = './tmp/'
 
 function getBosses(url){
   let res = {}
   return fetch(url).then(res => res.text()).then(data=>{
-    res.bosses = {};
-    res.updated = (data.match(/class="cooking">.*?(\d+.*?)</)||[])[1];
-    res.source = url;
-    const rowRegex = /(CH|EN|PH|TH|ID) *(\d+)[\s<"'].*?<\/td>\s+<(.*?)<\/tr>/gs;
-    let channelData;
-    while( channelData = rowRegex.exec(data) ){
-      const channelId = channelData[1] + channelData[2];
-      res.bosses[channelId] = [];
-      const channelBosses = channelData[3].split('<td');
-      channelBosses.forEach(floorData=>{
-        const cellRegex = /src="[^"]*\/(.*?)\.png/gs;
-        let boss, floorBoss = [];
-        while( boss = cellRegex.exec(floorData) ){
-          if( boss[1] == 'hatii' ) boss[1] = 'garm'; // pepega
-          if( boss[1] == 'piper' ) boss[1] = 'flute_player'; // pepega
-          if( boss[1] == 'gazeti' ) boss[1] = 'ice_statue'; // pepega
-          floorBoss.push(boss[1].toLowerCase());
-        }
-        res.bosses[channelId].push(floorBoss)
-      })
+    const rawtable = data.match(/<table.*<\/table>/)[0];
+    const table = tabletojson.convert(rawtable, {forceIndexAsNumber: true})[0];
+    res.updated = table[2][Object.keys(table[1]).find(key=>table[1][key].match(/last update/i))||0];
+    res.source = creditUrl;
+
+    res.mvp = {};
+    res.mini = {};
+    for( i=5 ; i<62 ; i++ ){
+      for( j=1 ; j<=10 ; j++ ){
+        let key = table[i][0]%10 == 0 ? 'mvp' : 'mini';
+        res[key][j] || (res[key][j] = {});
+        res[key][j][table[i][0]] || (res[key][j][table[i][0]] = []);
+        res[key][j][table[i][0]].push(table[i][j]);
+      } 
     }
     return res;
   })
@@ -40,7 +34,7 @@ function getBosses(url){
 
 async function drawImage(data, type, message){
   // check if picture already cached
-  const hash = md5(JSON.stringify(data)) + '.png';
+  const hash = md5(JSON.stringify(data)+type) + '.png';
   try{
     if( message.content.match(/--nocache/i) ) throw 'no cache'
     const picture = fs.readFileSync(cacheDirectory + hash);
@@ -51,9 +45,8 @@ async function drawImage(data, type, message){
     else message.react('🖌');
   };
   
-  
   // if not, create new picture
-  const entries = Object.entries(data.bosses);
+  const entries = Object.entries(data[type]);
   const titleSize = 80;  // tulisan judul yang di atas
   const headerSize = 40;  // ukuran row header
   const channelSize = 75;  // ukuran column paling kiri yang tulisan channel
@@ -63,7 +56,7 @@ async function drawImage(data, type, message){
   const footerSize = 25; // footer
 
   const canvas = Canvas.createCanvas(
-    channelSize + entries[0][1].length*horizontalBuffer*2 + entries[0][1].flat().length*imageSize,
+    channelSize + Object.keys(entries[0][1]).length*horizontalBuffer*2 + Object.values(entries[0][1]).flat().length*imageSize,
     entries.length*(imageSize+verticalBuffer*2) + titleSize + headerSize + footerSize
   );
   const ctx = canvas.getContext('2d');
@@ -83,32 +76,37 @@ async function drawImage(data, type, message){
 
   ctx.font = 'bold 24px calibri'
   let offset = channelSize;
-  for( let i=0 ; i<entries[0][1].length ; i++ ){
+  
+  // iterate bosses in each ch sequentially, draw vertical line
+  for( const [floor, boss] of Object.entries(entries[Object.keys(entries)[0]][1]) ){
     ctx.beginPath();
     ctx.moveTo(offset, titleSize);
     ctx.lineTo(offset, canvas.height-footerSize);
     ctx.stroke();
-    const columnLength = (entries[0][1][i].length*imageSize)+2*horizontalBuffer;
-    ctx.fillText((type=='mvp'?10+i*10:i%2*3+3+(i>>1)*10)+'F', offset+columnLength/2, titleSize+headerSize/2);
+    const columnLength = (boss.length*imageSize)+2*horizontalBuffer;
+    ctx.fillText(floor+'F', offset+columnLength/2, titleSize+headerSize/2);
     offset += columnLength;
   }
 
   for( let i=0 ; i< entries.length ; i++ ){
-    const [channel, floor] = entries[i];
-    ctx.fillText(channel, channelSize/2, titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize) + imageSize/2  )
-    
+    const [channel, channelboss] = entries[i];
+    // channel name on the left
+    ctx.fillText('CH'+channel, channelSize/2, titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize) + imageSize/2  )
+    // horizontal lines
     ctx.beginPath();
     ctx.moveTo(0, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize));
     ctx.lineTo(canvas.width, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize));
     ctx.stroke();
     
     let offset = channelSize;
-    for( let j=0 ; j<floor.length ; j++ ){
-      const bosses = floor[j];
+    
+    for( const [floor, bosses] of Object.entries(channelboss)){
       offset += horizontalBuffer;
-      for( let k=0 ; k<bosses.length ; k++ ){
+    
+      for( let j in bosses ){
+        boss = bosses[j]
         ctx.drawImage(
-          await assets.getCanvas(bosses[k]=='loading'?'question_mark':bosses[k]),
+          await assets.getCanvas(boss=='loading'?'question_mark':boss),
           offset,
           titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize),
           imageSize,
@@ -118,6 +116,21 @@ async function drawImage(data, type, message){
       }
       offset += horizontalBuffer;
     }
+    // for( let j=0 ; j<floor.length ; j++ ){
+    //   sost bosses = floor[j];
+    //   offset += horizontalBuffer;
+    //   for( let k=0 ; k<bosses.length ; k++ ){
+    //     ctx.drawImage(
+    //       await assets.getCanvas(bosses[k]=='loading'?'question_mark':bosses[k]),
+    //       offset,
+    //       titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize),
+    //       imageSize,
+    //       imageSize
+    //     );
+    //     offset += imageSize;
+    //   }
+    //   offset += horizontalBuffer;
+    // }
   }
   
   ctx.font = '16px roboto';
@@ -133,54 +146,29 @@ async function drawImage(data, type, message){
   return [buf, data.updated];
 }
 
-function getMvp(message){
-  return getBosses(mvpUrl).then(data=>{
-    return drawImage(data, 'mvp', message);
-  })
-}
-
-function getMini(message){
-  return getBosses(miniUrl).then(data=>{
-    return drawImage(data, 'mini', message);
-  })
-}
-
 module.exports = {
-	name: 'et',
+	name: 'et2',
   alias: '^ett+$',
 	description: 'Endless Tower Boss List (SEA)',
 	async execute(message, args) {
     message.react('🆗');
-    const dbImageMvp = await db.get('et', {type: 'mvp'}).then(res => res[0]) || {};  
-    if( dbImageMvp.created_at > new Date ){
-      image = dbImageMvp.url;
-      message.channel.send({files: [image]}).catch((err)=>{
-        return message.channel.send('Gagal mengirim gambar, coba cek di ' + mvpUrl );
-      })
-    }
-    else{
-      getMvp(message).then(([image, updated])=>{
+    try{
+      bosses = await getBosses(etUrl);
+      drawImage(bosses, 'mvp', message).then(([image, updated])=>{
         message.channel.send('Updated ' + updated, new Discord.Attachment(image, 'mvp.png'))
       }).catch((err)=>{
         console.log(err);
-        return message.channel.send('Gagal mengirim gambar, coba cek di ' + mvpUrl );
+        return message.channel.send('Gagal mengirim gambar, coba cek di ' + creditUrl );
       });
-    }
-    
-    const dbImageMini = await db.get('et', {type: 'mini'}).then(res => res[0]) || {};  
-    if( dbImageMini.created_at > new Date ){
-      image = dbImageMini.url;
-      message.channel.send({files: [image]}).catch((err)=>{
-        return message.channel.send('Gagal mengirim gambar, coba cek di ' + miniUrl );
-      })
-    }
-    else{
-      getMini(message).then(([image, updated])=>{
+      drawImage(bosses, 'mini', message).then(([image, updated])=>{
         message.channel.send('Updated ' + updated, new Discord.Attachment(image, 'mini.png'))
       }).catch((err)=>{
         console.log(err);
-        return message.channel.send('Gagal mengirim gambar, coba cek di ' + miniUrl );
+        return message.channel.send('Gagal mengirim gambar, coba cek di ' + creditUrl );
       });
+    } catch(err){
+      console.log(err);
+      return message.channel.send('Gagal mengirim gambar, coba cek di ' + creditUrl );
     }
 	},
 };  

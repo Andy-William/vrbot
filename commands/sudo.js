@@ -41,6 +41,21 @@ module.exports = {
           return message.channel.send(`Oracle set to <${args[1]}>`);
         }
         break;
+      case 'et':
+        if( args[1] == '' || args[2] == '' ) return message.reply('invalid params. format: `sudo et mini/mvp url`');
+        else if( args[1] != 'mini' && args[1] != 'mvp' ) return message.reply('invalid params. format: `sudo et mini/mvp url`');
+        else{
+          const data = {
+            type: args[1],
+            url: args[2],
+            created_at: reset.nextReset()-1
+          }
+          db.update('et', {type: args[1]}, data, {upsert: true}).then(()=>{
+            message.react('✅');
+          })
+          return message.channel.send(`ET(${args[1]}) set to <${args[2]}>`);
+        }
+        break;
       case 'img':
         const url = args[1];
         getBase64Image(url).then(res=>message.reply('original hash: ' + md5(res)));
