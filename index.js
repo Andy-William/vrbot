@@ -29,6 +29,9 @@ client.on('message', (message) => {
       }
       return;
     }
+    if( message.author.id == '625903832500666398' && message.content.startsWith('untuk sementara Synthesis Offhand sedang dalam Maintenance')){
+      message.channel.send('<@!232347895997792256>')
+    }
 
     if( message.author.bot ) return;
     if ( message.content.startsWith(prefix) ){
@@ -64,7 +67,7 @@ client.on('message', (message) => {
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN).then(()=>{
-  require('./lib/cron.js')();
+  require('./lib/cron.js').init();
   (client.guilds.map((g)=>{console.log(g.name)}))
 }).catch(console.error);  
 

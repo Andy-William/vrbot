@@ -1,6 +1,6 @@
 const db = require('./../lib/mongo.js');
 
-const levels = [40,60,80,100]
+const levels = [40,60,80,100,120]
 
 module.exports = {
 	name: 'setvr',
