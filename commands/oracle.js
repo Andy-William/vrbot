@@ -1,11 +1,13 @@
 const fetch = require('node-fetch');
 const db = require('./../lib/mongo.js');
 const lastReset = require('./../lib/time.js');
+const cache = require('./../lib/cache.js');
 
 const oracleUrl = "https://spiriusgaming.com/oracle.html"
 
 module.exports = {
 	name: 'oracle',
+  alias: 'ora',
 	description: 'Oracle dungeon bosses (SEA)',
 	async execute(message, args) {
     message.react('🆗');
@@ -19,18 +21,22 @@ module.exports = {
       image = dbImage.url;
     }
     else{
-      const imgUrl = await fetch(oracleUrl)
+      const imgUrl = cache.get(oracleUrl) || await fetch(oracleUrl)
         .then(res => res.text()).then(data=>{
-          const regex = /img src\s*=\s*"(?!asset)(.*)"/
-          const matches = regex.exec(data)
-          return 'https://spiriusgaming.com/' + matches[1]
+          const regex = /img src\s*=\s*"(?!asset)(.*)"/;
+          const matches = regex.exec(data);
+          const url = 'https://spiriusgaming.com/' + matches[1];
+          cache.set(oracleUrl, url, 300);
+          return url;
         })
-      const webImage = await fetch(imgUrl)
+      const webImage = cache.get(imgUrl) || await fetch(imgUrl)
         .then(res => {
-          return {
+          const img = {
             url: imgUrl,
             created_at: new Date(res.headers.get('Last-Modified') || new Date()) - 0
           }
+          cache.set(imgUrl, img, 300);
+          return img;
         }).catch((e)=>{console.log(e); return {}});
       
       

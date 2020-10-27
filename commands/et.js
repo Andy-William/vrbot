@@ -5,13 +5,19 @@ const fs = require('fs');
 const md5 = require('md5');
 const assets = require('./../lib/assets.js')
 const db = require('./../lib/mongo.js');
+const cache = require('./../lib/cache.js');
 
 const mvpUrl = 'https://www.hdgames.net/boss.php'
 const miniUrl = 'https://www.hdgames.net/mini.php'
 const cacheDirectory = './tmp/'
 
+const miniLv = [83,86,88,89,92,93,95,96,98,99]
 function getBosses(url){
+  const cached = cache.get(url)
+  if( cached ) return new Promise((resolve, reject)=>resolve(cached));
+
   let res = {}
+  console.log('fetching ' + url)
   return fetch(url).then(res => res.text()).then(data=>{
     res.bosses = {};
     res.updated = (data.match(/class="cooking">.*?(\d+.*?)</)||[])[1];
@@ -34,6 +40,7 @@ function getBosses(url){
         res.bosses[channelId].push(floorBoss)
       })
     }
+    cache.set(url, res, 300);
     return res;
   })
 }
@@ -50,7 +57,6 @@ async function drawImage(data, type, message){
     if( type == 'mvp' ) message.react('🎨');
     else message.react('🖌');
   };
-  
   
   // if not, create new picture
   const entries = Object.entries(data.bosses);
@@ -89,7 +95,7 @@ async function drawImage(data, type, message){
     ctx.lineTo(offset, canvas.height-footerSize);
     ctx.stroke();
     const columnLength = (entries[0][1][i].length*imageSize)+2*horizontalBuffer;
-    ctx.fillText((type=='mvp'?10+i*10:i%2*3+3+(i>>1)*10)+'F', offset+columnLength/2, titleSize+headerSize/2);
+    ctx.fillText((type=='mvp'?Math.floor((i+1)*3+(i+1)/3):miniLv[i])+'F', offset+columnLength/2, titleSize+headerSize/2);
     offset += columnLength;
   }
 

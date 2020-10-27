@@ -21,7 +21,7 @@ module.exports = {
     else rarity = 4
     
     const card = (await db.getRandom('cards', {nolan: rarity}))[0];
-    let str = "💳 Combined Fate Simulator 💳\n";
+    let str = "<:nolan:765856406540124171> Combined Fate Simulator <:nolan:765856406540124171>\n";
     str += `${message.author.toString()} dapat **${card.name} Card** - harganya ${(card.price||0).toLocaleString()}\n`;
 
     await message.channel.send(str).catch((err)=>console.log(err));

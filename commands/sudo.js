@@ -42,8 +42,13 @@ module.exports = {
         }
         break;
       case 'et':
-        if( args[1] == '' || args[2] == '' ) return message.reply('invalid params. format: `sudo et mini/mvp url`');
-        else if( args[1] != 'mini' && args[1] != 'mvp' ) return message.reply('invalid params. format: `sudo et mini/mvp url`');
+        if( args[1] == 'reset' ){
+          db.delete('et', {created_at: reset.nextReset()-1}).then(()=>{
+            message.react('✅');
+            message.channel.send(`ET reseted`);
+          })
+        }
+        else if( args[1] != 'mini' && args[1] != 'mvp' ) return message.reply('invalid params. format: `sudo et mini/mvp url` or `sudo et reset`');
         else{
           const data = {
             type: args[1],
@@ -52,8 +57,8 @@ module.exports = {
           }
           db.update('et', {type: args[1]}, data, {upsert: true}).then(()=>{
             message.react('✅');
+            return message.channel.send(`ET(${args[1]}) set to <${args[2]}>`);
           })
-          return message.channel.send(`ET(${args[1]}) set to <${args[2]}>`);
         }
         break;
       case 'img':

@@ -73,4 +73,12 @@ client.login(process.env.DISCORD_BOT_TOKEN).then(()=>{
 
 client.on('error', (err) => console.error(err));
 
+client.on("guildCreate", (guild) => {
+    client.channels.get(process.env.DEV_CHANNEL_ID).send(`Joined new guild: ${guild.name}`);
+});
+
+client.on("guildDelete", (guild) => {
+    client.channels.get(process.env.DEV_CHANNEL_ID).send(`Left guild: ${guild.name}`);
+})
+
 require('./web.js');

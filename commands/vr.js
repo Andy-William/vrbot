@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const db = require('./../lib/mongo.js');
 const lastReset = require('./../lib/time.js');
+const cache = require('./../lib/cache.js');
 
 const vrUrl = "https://spiriusgaming.com/vr-maps.html"
 
@@ -37,18 +38,23 @@ module.exports = {
       image = dbImage.url;
     }
     else{
-      const imgUrl = await fetch('https://spiriusgaming.com/vr-maps.html')
+      
+      const imgUrl = cache.get(vrUrl) || await fetch(vrUrl)
         .then(res => res.text()).then(data=>{
-          const regex = /img src\s*=\s*"(?!asset)(.*)"/
-          const matches = regex.exec(data)
-          return 'https://spiriusgaming.com/' + matches[1]
+          const regex = /img src\s*=\s*"(?!asset)(.*)"/;
+          const matches = regex.exec(data);
+          const url = 'https://spiriusgaming.com/' + matches[1];
+          cache.set(vrUrl, url, 300);
+          return url;
         })
-      const webImage = await fetch(imgUrl)
+      const webImage = cache.get(imgUrl) || await fetch(imgUrl)
         .then(res => {
-          return {
+          const img = {
             url: imgUrl,
             created_at: new Date(res.headers.get('Last-Modified')) - 0
           }
+          cache.set(imgUrl, img, 300);
+          return img;
         }).catch((e)=>{console.log(e); return {}});
       
       // if external is more updated than database, update it
