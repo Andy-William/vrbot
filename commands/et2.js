@@ -148,7 +148,6 @@ async function drawImage(data, type, message){
 
 module.exports = {
 	name: 'et2',
-  alias: '^ett+$',
 	description: 'Endless Tower Boss List (SEA)',
 	async execute(message, args) {
     message.react('🆗');
