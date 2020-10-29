@@ -12,7 +12,7 @@ const chances = {
   '012': [0.0, 30.0, 70.0],
   '003': [0.0, 0.0, 100.0]
 }
-                
+
 module.exports = {
 	name: 'poring',
   alias: 'kp',

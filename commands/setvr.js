@@ -11,7 +11,7 @@ module.exports = {
     
     const channel = args[0];
     let data;
-    if( channel.match(/(ID|PH|TH|CN|EN)\d+/) ){
+    if( channel.match(/(ID|PH|TH|CN|EN)\d{1,3}/) ){
       data = {
         level: channel,
         boss: args.slice(1).join(' '),

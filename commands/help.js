@@ -9,6 +9,7 @@ const helpMessage = `Commands Help ❓
 
 !nolan ➜ Combined Fate Simulator
 !poring !kp ➜ Card reroll simulator
+!extract !re ➜ Oracle mirror simulator
 
 !reminder ➜ Pengingat event
 
