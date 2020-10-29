@@ -30,7 +30,7 @@ module.exports = {
       while( match = colorRegex.exec(data) ) cards.push({color: colorMap[match[1]]});
       for( let i=0 ; match = nameRegex.exec(data) ; i++ ) cards[i].name = match[1];
       for( let i=0 ; match = priceRegex.exec(data) ; i++ ) cards[i].price = match[1];
-      cache.set(cardUrl, cards, 300);
+      cache.set(cardUrl, cards, 600);
       return cards;
     }).catch((err)=>console.log(err));
 

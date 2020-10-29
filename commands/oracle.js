@@ -26,7 +26,7 @@ module.exports = {
           const regex = /img src\s*=\s*"(?!asset)(.*)"/;
           const matches = regex.exec(data);
           const url = 'https://spiriusgaming.com/' + matches[1];
-          cache.set(oracleUrl, url, 300);
+          cache.set(oracleUrl, url, 600);
           return url;
         })
       const webImage = cache.get(imgUrl) || await fetch(imgUrl)
@@ -35,7 +35,7 @@ module.exports = {
             url: imgUrl,
             created_at: new Date(res.headers.get('Last-Modified') || new Date()) - 0
           }
-          cache.set(imgUrl, img, 300);
+          cache.set(imgUrl, img, 600);
           return img;
         }).catch((e)=>{console.log(e); return {}});
       
