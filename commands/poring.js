@@ -15,7 +15,7 @@ const chances = {
 
 module.exports = {
 	name: 'poring',
-  alias: 'kp',
+  alias: 'kp$',
 	description: 'King Poring Card Reproduction Simulator',
 	async execute(message, args) {
     args = args.join('')

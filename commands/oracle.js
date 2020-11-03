@@ -7,7 +7,7 @@ const oracleUrl = "https://spiriusgaming.com/oracle.html"
 
 module.exports = {
 	name: 'oracle',
-  alias: 'ora',
+  alias: 'ora$',
 	description: 'Oracle dungeon bosses (SEA)',
 	async execute(message, args) {
     message.react('🆗');
@@ -28,7 +28,7 @@ module.exports = {
           const url = 'https://spiriusgaming.com/' + matches[1];
           cache.set(oracleUrl, url, 600);
           return url;
-        })
+        }).catch((e)=>{console.log(e); return {}});
       const webImage = cache.get(imgUrl) || await fetch(imgUrl)
         .then(res => {
           const img = {

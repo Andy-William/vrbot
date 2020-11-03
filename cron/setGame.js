@@ -8,7 +8,8 @@ const games = [
   'GB ET dong !et',
   'Endless Tower !et',
   'Valhalla Ruins !vr',
-  'ora nm tuyul -1 !oracle'
+  'rip bcc !extract',
+  'ora nm -1 !oracle'
 ]
 
 function setRandomGame(){

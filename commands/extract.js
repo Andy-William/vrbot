@@ -18,19 +18,20 @@ const odds = {
 
 module.exports = {
 	name: 'extract',
-  alias: 're',
+  alias: 're$',
 	description: 'Oracle Mirror Extraction Simulator',
 	async execute(message, args) {
     if( !args[0] ) return message.reply('Usage: `extract <spasi> level`');
-    if( args[0] < 1 || args[0] > 15 ) return message.reply('Usage: `level harus 1-15');
+    const level = parseInt(args[0]);
 
-    const level = args[0]-0;
+    if( !(level >= 1 && level <= 15) ) return message.reply('level harus 1-15');
+
     const odd = odds[level];
     let random = Math.random() * 200;
     let result;
 
     for(const [index, current] of odd.entries()){
-      if( random <= current ){
+      if( random < current ){
         result = index+1;
         break;
       }

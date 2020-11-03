@@ -42,7 +42,7 @@ function getBosses(url){
     }
     cache.set(url, res, 300);
     return res;
-  })
+  }).catch((e)=>{console.log(e); return {}});
 }
 
 async function drawImage(data, type, message){
