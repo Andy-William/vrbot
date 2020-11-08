@@ -56,7 +56,7 @@ module.exports = {
         const price = parseInt(cards[i].price.replace(/,/g,''));
         const gram = gramMap[cards[i].color];
         if( gram && price ){
-          cards[i].gram = price/gram;
+          cards[i].gram = (price+10000)/gram;
           if( cards[i].gram < minGram ) minGram = cards[i].gram;
         }
       }
