@@ -2,8 +2,8 @@ const announce = require('./../lib/announce.js');
 
 module.exports = {
 	name: 'Loli Ruri Shadow reminder',
-	schedule: '0 20 24-30 8 *',
+	schedule: '0 20 26-30 11 *',
 	async action() {
-    announce("Strange Poring muncul di Poring Island! Max 5 **Meteor Chest** per char") 
+    announce("Giant Peco Peco muncul di Sograt Desert! Drop **Delicious Meat Chunk** (max 150)") 
   },
 };

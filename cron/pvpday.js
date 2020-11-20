@@ -6,7 +6,7 @@ module.exports = {
 	schedule: '0 12 * * Sat',
 	async action() {
     const weekNum = currentWeek.week(new Date());
-    if( Math.floor(weekNum/5)%2 == 1 ) announce("<:pvpr:678097570618408961> Hari ini ada **PvP Rank** <:pvpr:678097570618408961>")
+    if( (weekNum-1)%10 >= 4 ) announce("<:pvpr:678097570618408961> Hari ini ada **PvP Rank** <:pvpr:678097570618408961>")
 	},
 };
 
@@ -19,4 +19,5 @@ have pvp:
 2649
 2650
 
+2655
 */

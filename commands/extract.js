@@ -18,7 +18,7 @@ const odds = {
 
 module.exports = {
 	name: 'extract',
-  alias: 're$',
+  alias: '^re$',
 	description: 'Oracle Mirror Extraction Simulator',
 	async execute(message, args) {
     if( !args[0] ) return message.reply('Usage: `extract <spasi> level`');

@@ -15,19 +15,19 @@ module.exports = {
 	async execute(message, args) {
     if( message.guild.id != '555311795771015189' ) return;
     switch(args[0]){
-      case 'vr':
-        if( args[1] == '' ) return message.reply('invalid params. format: `sudo vr url`');
-        else{
-          const data = {
-            url: args[1],
-            created_at: reset.nextReset()-1
-          }
-          db.update('valhalla_map', {level: 0}, data, {upsert: true}).then(()=>{
-            message.react('✅');
-          })
-          return message.channel.send(`VR set to <${args[1]}>`);
-        }
-        break;
+      // case 'vr':
+      //   if( args[1] == '' ) return message.reply('invalid params. format: `sudo vr url`');
+      //   else{
+      //     const data = {
+      //       url: args[1],
+      //       created_at: reset.nextReset()-1
+      //     }
+      //     db.update('valhalla_map', {level: 0}, data, {upsert: true}).then(()=>{
+      //       message.react('✅');
+      //     })
+      //     return message.channel.send(`VR set to <${args[1]}>`);
+      //   }
+      //   break;
       case 'oracle':
         if( args[1] == '' ) return message.reply('invalid params. format: `sudo oracle url`');
         else{
