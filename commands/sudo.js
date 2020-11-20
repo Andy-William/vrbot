@@ -15,19 +15,30 @@ module.exports = {
 	async execute(message, args) {
     if( message.guild.id != '555311795771015189' ) return;
     switch(args[0]){
-      // case 'vr':
-      //   if( args[1] == '' ) return message.reply('invalid params. format: `sudo vr url`');
-      //   else{
-      //     const data = {
-      //       url: args[1],
-      //       created_at: reset.nextReset()-1
-      //     }
-      //     db.update('valhalla_map', {level: 0}, data, {upsert: true}).then(()=>{
-      //       message.react('✅');
-      //     })
-      //     return message.channel.send(`VR set to <${args[1]}>`);
-      //   }
-      //   break;
+      case 'vr':
+        if( !args[1] || args[1] == '' ) return message.reply('invalid params. format: `sudo vr bosses`');
+        else{
+          message.react('✅')
+          const data = args.slice(1).join(' ');
+          const bossRegex = /((?:CH|EN|PH|TH|ID)\s*\d{1,3})(.{15,})(?:\n|$)/g;
+          let bossData;
+          let updates = []
+          while( bossData = bossRegex.exec(data) ){
+            const chData = {
+              level: bossData[1].replace(/\s/g,''),
+              boss: bossData[2],
+              actor: message.author.username,
+              id: message.guild.id,
+              created_at: new Date().getTime()
+            }
+            updates.push({
+              query: {id: chData.id, level: chData.level, actor: chData.actor},
+              data: chData
+            })
+          }
+          db.bulkUpdate('valhalla', updates, true).then(()=>message.channel.send(`updated`))
+        }
+        break;
       case 'oracle':
         if( args[1] == '' ) return message.reply('invalid params. format: `sudo oracle url`');
         else{

@@ -13,7 +13,7 @@ module.exports = {
     let data;
     if( channel.match(/(ID|PH|TH|CN|EN)\d{1,3}/) ){
       data = {
-        level: channel,
+        level: channel.replace(/\s/g,''),
         boss: args.slice(1).join(' '),
         actor: message.author.username,
         id: message.guild.id,
