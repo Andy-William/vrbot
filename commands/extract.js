@@ -43,3 +43,4 @@ module.exports = {
     await message.channel.send(str).catch((err)=>console.log(err));
 	},
 };
+  

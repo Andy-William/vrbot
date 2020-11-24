@@ -20,7 +20,7 @@ module.exports = {
         else{
           message.react('✅')
           const data = args.slice(1).join(' ');
-          const bossRegex = /((?:CH|EN|PH|TH|ID)\s*\d{1,3})(.{15,})(?:\n|$)/g;
+          const bossRegex = /((?:CN|EN|PH|TH|ID|VN)\s*\d{1,3})(.{15,})(?:\n|$)/gi;
           let bossData;
           let updates = []
           while( bossData = bossRegex.exec(data) ){

@@ -9,12 +9,12 @@ module.exports = {
       return message.reply('Usage: `setvr <spasi> bossnya` atau `setvr <spasi> channel <spasi> bossnya`')
     }
     
-    const channel = args[0];
+    const channel = (args[0].match(/(ID|PH|TH|CN|EN|VN)\d{1,3}/i)||[])[0];
     let data;
-    if( channel.match(/(ID|PH|TH|CN|EN)\d{1,3}/) ){
+    if( channel ){
       data = {
-        level: channel.replace(/\s/g,''),
-        boss: args.slice(1).join(' '),
+        level: channel.toUpperCase(),
+        boss: args.slice(1).join(' ').slice(0,150),
         actor: message.author.username,
         id: message.guild.id,
         created_at: new Date().getTime()
@@ -23,7 +23,7 @@ module.exports = {
     else{
       data = {
         level: 0,
-        boss: args.join(' '),
+        boss: args.join(' ').slice(0,150),
         actor: message.author.username,
         id: message.guild.id,
         created_at: new Date().getTime()

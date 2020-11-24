@@ -14,10 +14,10 @@ module.exports = {
       } catch( error ){
         return message.channel.send(error.message);
       }
-      bosses = await db.get('valhalla', {created_at: {$gte: lastReset.lastReset()}, level: {$ne: 0}}, {level: 1, created_at: 1});
+      bosses = await db.get('valhalla', {created_at: {$gte: lastReset.lastReset()}, level: {$ne: 0}}, {level: 1, created_at: 1}, {numericOrdering:true,locale:"en_US"});
     }
     else{ // get bosses in this guild only
-      bosses = await db.get('valhalla', {id: (message.guild||{}).id, created_at: {$gte: lastReset.lastReset()}}, {level: 1, created_at: 1})
+      bosses = await db.get('valhalla', {id: (message.guild||{}).id, created_at: {$gte: lastReset.lastReset()}}, {level: 1, created_at: 1}, {numericOrdering:true,locale:"en_US"})
     }
 
     let str = "";

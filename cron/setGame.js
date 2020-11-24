@@ -9,6 +9,7 @@ const games = [
   'Endless Tower !et',
   'Valhalla Ruins !vr',
   'rip bcc !extract',
+  'gacha tengah !feast',
   'ora nm -1 !oracle'
 ]
 

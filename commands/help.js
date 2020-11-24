@@ -10,6 +10,7 @@ const helpMessage = `Commands Help ❓
 !nolan ➜ Combined Fate Simulator (price outdated)
 !poring !kp ➜ Card reroll simulator (price outdated)
 !extract !re ➜ Oracle mirror simulator
+!feast ➜ Feast Gacha Simulator
 
 !reminder ➜ Pengingat event
 
