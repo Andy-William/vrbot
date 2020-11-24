@@ -20,7 +20,7 @@ const gramMap = {
 function dbUpdateData(card){
   let name = card.name.replace(/^[^-]*- /,'').replace(/★/, ' * ').replace(/’/, "'").replace(/ 👍/, '').replace(/  /g,' ')
   return {
-    query: {name: name.match(/^(.*?)(?: Card)?$/i)[1]},
+    query: {name: name},
     data: {
       price: card.price,
       lastRequest: card.lastRequest,
@@ -40,13 +40,13 @@ module.exports = {
     let str = '';
 
     let query = {color: {$in: []}};
-    // if( args.match(/putih|white/i) ) query.color.$in.push('white');
-    // if( args.match(/hijau|green|ijo/i) ) query.color.$in.push('green');
-    // if( args.match(/biru|blue/i) ) query.color.$in.push('blue');
-    // if( args.match(/ungu|purple/i) ) query.color.$in.push('purple');
+    if( args.match(/putih|white/i) ) query.color.$in.push('white');
+    if( args.match(/hijau|green|ijo/i) ) query.color.$in.push('green');
+    if( args.match(/biru|blue/i) ) query.color.$in.push('blue');
+    if( args.match(/ungu|purple/i) ) query.color.$in.push('purple');
     if( args.match(/mini/i) ) query.color.$in.push('mini');
     if( args.match(/mvp/i) ) query.color.$in.push('mvp');
-    // if( args.match(/haute|craft/i) ) query.color.$in.push('haute');
+    if( args.match(/haute|craft/i) ) query.color.$in.push('haute');
 
     if( query.color.$in.length == 0 ){ // get cheap cards
       const cards = cache.get(cardUrl) || await fetch(cardUrl).then(res => res.text()).then(data=>{
@@ -98,14 +98,15 @@ module.exports = {
       const cards = {}; // processed card
       data.forEach(card=>{
         cards[card.name] = {
-          price: card.price,
+          price: typeof(card.price)=="string" ? parseInt(card.price.replace(/,/g,'')) : card.price,
           lastRequest: card.lastRequest,
           volume: card.volume
         };
       });
 
       // sort highest price first
-      const sortedCard = Object.entries(cards).sort((a,b) => (b[1].price||Infinity) - (a[1].price||Infinity));
+      console.log(Object.entries(cards))
+      const sortedCard = Object.entries(cards).sort((a,b) => (b[1].price||1E99) - (a[1].price||1E99));
 
       str = "Card Prices - Powered by poring.life\n❌: Out of Stock\n";
       let totalPrice = 0;
@@ -118,7 +119,7 @@ module.exports = {
           totalCount++;
         }
         if( !card[1].volume ) str += '❌';
-        str += ` - ${card[0]} - ${Math.round((Date.now()/1000-card[1].lastRequest)/360)/10} hour(s) ago\n`
+        str += ` - ${card[0].replace(/\s+card$/i,"")} - ${Math.round((Date.now()/1000-card[1].lastRequest)/360)/10} hour(s) ago\n`
       });
       str += 'Average Price: ' + Math.round(totalPrice/totalCount).toLocaleString() + '\n';
     }

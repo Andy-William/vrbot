@@ -4,7 +4,7 @@ const poring = require('./../lib/poring.js');
 function dbUpdateData(card){
   let name = card.name.replace(/^[^-]*- /,'').replace(/★/, ' * ').replace(/’/, "'").replace(/ 👍/, '').replace(/  /g,' ')
   return {
-    query: {name: name.match(/^(.*?)(?: Card)?$/i)[1]},
+    query: {name: name},
     data: {
       price: card.price,
       lastRequest: card.lastRequest,
@@ -15,12 +15,13 @@ function dbUpdateData(card){
 }
 
 module.exports = {
-	name: 'wednesday event reminder',
-	schedule: '0 1 * * *',
+	name: 'update card prices',
+	schedule: '0 * * * *',
 	async action() {
-    db.get('cards', {color: {$in: ['mvp', 'mini']}}).then(async (res)=>{
+    // update random card from more than 24 hours ago
+    db.getRandom('cards', {lastRequest: {$lt: new Date()/1000-60*60*24}}, 20).then(async (res)=>{
       for( let i=0 ; i<res.length ; i++ ){
-        const cards = await poring.getPrice(res[i].name + ' card')
+        const cards = await poring.getPrice(res[i].name)
         if( cards.length == 0 ) console.log('failed', res[i].name)
         cards.forEach(card=>{
           card = dbUpdateData(card)
