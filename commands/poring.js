@@ -35,7 +35,7 @@ module.exports = {
     const card = (await db.getRandom('cards', {color: color}))[0];
 
     let str = "🃏 King Poring Card Reproduction Simulator 🃏\n";
-    str += `${message.author.toString()} dapat **${card.name} Card** - harganya ${(card.price||0).toLocaleString()}\n`;
+    str += `${message.author.toString()} dapat **${card.name}** - harganya ${(card.price||0).toLocaleString()}\n`;
 
     await message.channel.send(str).catch((err)=>console.log(err));
 	},

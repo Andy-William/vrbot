@@ -18,9 +18,8 @@ const gramMap = {
 
 // convert format
 function dbUpdateData(card){
-  let name = card.name.replace(/^[^-]*- /,'').replace(/★/, ' * ').replace(/’/, "'").replace(/ 👍/, '').replace(/  /g,' ')
   return {
-    query: {name: name},
+    query: {name: card.name},
     data: {
       price: card.price,
       lastRequest: card.lastRequest,
@@ -105,7 +104,6 @@ module.exports = {
       });
 
       // sort highest price first
-      console.log(Object.entries(cards))
       const sortedCard = Object.entries(cards).sort((a,b) => (b[1].price||1E99) - (a[1].price||1E99));
 
       str = "Card Prices - Powered by poring.life\n❌: Out of Stock\n";
@@ -119,7 +117,7 @@ module.exports = {
           totalCount++;
         }
         if( !card[1].volume ) str += '❌';
-        str += ` - ${card[0].replace(/\s+card$/i,"")} - ${Math.round((Date.now()/1000-card[1].lastRequest)/360)/10} hour(s) ago\n`
+        str += ` - ${card[0].replace(/\s*card$/i,"")} - ${Math.round((Date.now()/1000-card[1].lastRequest)/360)/10} hour(s) ago\n`
       });
       str += 'Average Price: ' + Math.round(totalPrice/totalCount).toLocaleString() + '\n';
     }

@@ -2,9 +2,8 @@ const db = require('./../lib/mongo.js');
 const poring = require('./../lib/poring.js');
 
 function dbUpdateData(card){
-  let name = card.name.replace(/^[^-]*- /,'').replace(/★/, ' * ').replace(/’/, "'").replace(/ 👍/, '').replace(/  /g,' ')
   return {
-    query: {name: name},
+    query: {name: card.name},
     data: {
       price: card.price,
       lastRequest: card.lastRequest,
