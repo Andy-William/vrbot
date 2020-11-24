@@ -1,6 +1,5 @@
 const fs = require('fs');
 const db = require('./../lib/mongo.js');
-const poporing = require('./../lib/poporing.js');
 
 module.exports = {
 	name: 'pet',
@@ -27,22 +26,6 @@ module.exports = {
       };
       if( !pet.lastRequest || pet.lastRequest < someTimeAgo ) updates.push(pet.catch);
     });
-
-    if( updates.length > 0 ){
-      const prices = await poporing.bulkGetPrice(updates);
-
-      let bulkUpdateQuery = []
-      prices.forEach(p=>{
-        const item = p.name;
-        pets[item].price = p.price||'???';
-        pets[item].lastRequest = p.lastRequest;
-        bulkUpdateQuery.push({
-          query: {catch: item},
-          data: pets[item]
-        });
-      })
-      db.bulkUpdate('pets', bulkUpdateQuery);
-    }
 
     const longestNameLength = Math.max(...Object.values(pets).map(pet=> pet.name.length))
     const longestItemLength = Math.max(...Object.keys(pets).map(item=> item.length))

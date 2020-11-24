@@ -7,7 +7,7 @@ const helpMessage = `Commands Help ❓
 !smvp ➜ SMVP minggu ini
 !vr ➜ Valhalla ruins
 
-!nolan ➜ Combined Fate Simulator (price outdated)
+!nolan ➜ Combined Fate Simulator
 !poring !kp ➜ Card reroll simulator (price outdated)
 !extract !re ➜ Oracle mirror simulator
 !feast ➜ Feast Gacha Simulator
