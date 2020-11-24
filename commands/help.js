@@ -2,13 +2,13 @@ const helpMessage = `Commands Help ❓
 \`\`\`
 !card ➜ cek harga kartu
 !et ➜ Endless Tower
-!oracle ➜ Oracle dungeon
-!pet ➜ cek harga tangkap pet (price outdated)
+!oracle !ora ➜ Oracle dungeon
+!pet ➜ cek harga tangkap pet
 !smvp ➜ SMVP minggu ini
 !vr ➜ Valhalla ruins
 
 !nolan ➜ Combined Fate Simulator
-!poring !kp ➜ Card reroll simulator (price outdated)
+!poring !kp ➜ Card reroll simulator
 !extract !re ➜ Oracle mirror simulator
 !feast ➜ Feast Gacha Simulator
 

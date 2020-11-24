@@ -1,4 +1,3 @@
-const fs = require('fs');
 const db = require('./../lib/mongo.js');
 
 module.exports = {
@@ -13,8 +12,6 @@ module.exports = {
     console.log('query done');
 
     const pets = {}; // processed pet catch items
-    let updates = []; // list of outdated prices
-    const someTimeAgo = Number(new Date())/1000 - 10800; // 3 hours ago
 
     data.forEach(pet=>{
       pets[pet.catch] = {
@@ -23,8 +20,7 @@ module.exports = {
         quantity: pet.quantity,
         price: pet.price,
         lastRequest: pet.lastRequest
-      };
-      if( !pet.lastRequest || pet.lastRequest < someTimeAgo ) updates.push(pet.catch);
+      };;
     });
 
     const longestNameLength = Math.max(...Object.values(pets).map(pet=> pet.name.length))

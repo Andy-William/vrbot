@@ -106,7 +106,7 @@ module.exports = {
       // sort highest price first
       const sortedCard = Object.entries(cards).sort((a,b) => (b[1].price||1E99) - (a[1].price||1E99));
 
-      str = "Card Prices - Powered by poring.life\n❌: Out of Stock\n";
+      str = "King Poring Card Reproduction Prices - Powered by poring.life\n❌: Out of Stock\n";
       let totalPrice = 0;
       let totalCount = 0;
       sortedCard.forEach((card)=>{
