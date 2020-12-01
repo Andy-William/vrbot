@@ -16,7 +16,7 @@ client.on('message', (message) => {
     }
     message.reply(msg||'ada error, coba lagi aja');
     client.channels.get(process.env.DEV_CHANNEL_ID).send(log);
-    client.channels.get(process.env.DEV_CHANNEL_ID).send(msg);
+    client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(msg);
   }
   
   try{
@@ -61,24 +61,29 @@ client.on('message', (message) => {
       msg = err;
     }
     message.reply(msg||'ada error, coba lagi aja');
-    client.channels.get(process.env.DEV_CHANNEL_ID).send(log);
-    client.channels.get(process.env.DEV_CHANNEL_ID).send(msg);
+    client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(log);
+    client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(msg);
   }
 });
 
 client.login(process.env.DISCORD_BOT_TOKEN).then(()=>{
   require('./lib/cron.js').init();
-  (client.guilds.map((g)=>{console.log(g.name)}))
+  
+  setTimeout(()=>{
+    client.guilds.cache.forEach((guild) => {
+        console.log(guild.name || guild.id );
+    });
+  }, 1000)
 }).catch(console.error);  
 
 client.on('error', (err) => console.log(err));
 
 client.on("guildCreate", (guild) => {
-    client.channels.get(process.env.DEV_CHANNEL_ID).send(`Joined new guild: ${guild.name}`);
+  client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(`Joined new guild: ${guild.name}`);
 });
 
 client.on("guildDelete", (guild) => {
-    client.channels.get(process.env.DEV_CHANNEL_ID).send(`Left guild: ${guild.name}`);
+  client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(`Left guild: ${guild.name}`);
 })
 
 require('./web.js');

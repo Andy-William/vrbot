@@ -4,7 +4,6 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const md5 = require('md5');
 const assets = require('./../lib/assets.js')
-const db = require('./../lib/mongo.js');
 const cache = require('./../lib/cache.js');
 
 const mvpUrl = 'https://www.hdgames.net/boss.php'
@@ -157,36 +156,30 @@ module.exports = {
 	description: 'Endless Tower Boss List (SEA)',
 	async execute(message, args) {
     message.react('🆗');
-    const dbImageMvp = await db.get('et', {type: 'mvp'}).then(res => res[0]) || {};  
-    if( dbImageMvp.created_at > new Date ){
-      image = dbImageMvp.url;
-      message.channel.send({files: [image]}).catch((err)=>{
-        return message.channel.send('Gagal mengirim gambar, coba cek di ' + mvpUrl );
-      })
-    }
-    else{
-      getMvp(message).then(([image, updated])=>{
-        message.channel.send('Updated ' + updated, new Discord.Attachment(image, 'mvp.png'))
-      }).catch((err)=>{
-        console.log(err);
-        return message.channel.send('Gagal mengirim gambar, coba cek di ' + mvpUrl );
-      });
-    }
+    getMvp(message).then(([image, updated])=>{
+      const embed = new Discord.MessageEmbed()
+        .setTitle('ET MVP List')
+        .setDescription('Updated ' + updated)
+        .setURL(mvpUrl)
+        .attachFiles([new Discord.MessageAttachment(image, 'mvp.png')])
+        .setImage('attachment://mvp.png')
+      message.channel.send(embed)
+    }).catch((err)=>{
+      console.log(err);
+      return message.channel.send('Gagal mengirim gambar, coba cek di ' + mvpUrl );
+    });
     
-    const dbImageMini = await db.get('et', {type: 'mini'}).then(res => res[0]) || {};  
-    if( dbImageMini.created_at > new Date ){
-      image = dbImageMini.url;
-      message.channel.send({files: [image]}).catch((err)=>{
-        return message.channel.send('Gagal mengirim gambar, coba cek di ' + miniUrl );
-      })
-    }
-    else{
-      getMini(message).then(([image, updated])=>{
-        message.channel.send('Updated ' + updated, new Discord.Attachment(image, 'mini.png'))
-      }).catch((err)=>{
-        console.log(err);
-        return message.channel.send('Gagal mengirim gambar, coba cek di ' + miniUrl );
-      });
-    }
+    getMini(message).then(([image, updated])=>{
+      const embed = new Discord.MessageEmbed()
+        .setTitle('ET Mini List')
+        .setDescription('Updated ' + updated)
+        .setURL(miniUrl)
+        .attachFiles([new Discord.MessageAttachment(image, 'mini.png')])
+        .setImage('attachment://mini.png')
+      message.channel.send(embed)
+    }).catch((err)=>{
+      console.log(err);
+      return message.channel.send('Gagal mengirim gambar, coba cek di ' + miniUrl );
+    });
 	},
 };  
