@@ -15,10 +15,10 @@ function dbUpdateData(card){
 
 module.exports = {
 	name: 'update card prices',
-	schedule: '0 * * * *',
+	schedule: '* * * * *',
 	async action() {
-    // update random card from more than 24 hours ago
-    db.getRandom('cards', {lastRequest: {$lt: new Date()/1000-60*60*24}}, 20).then(async (res)=>{
+    // update random card from more than 6 hours ago
+    db.getRandom('cards', {lastRequest: {$lt: new Date()/1000-60*60*6}}).then(async (res)=>{
       for( let i=0 ; i<res.length ; i++ ){
         const cards = await poring.getPrice(res[i].name)
         if( cards.length == 0 ) console.log('failed', res[i].name)
