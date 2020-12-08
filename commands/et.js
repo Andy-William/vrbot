@@ -3,12 +3,58 @@ const Canvas = require('canvas');
 const Discord = require('discord.js');
 const fs = require('fs');
 const md5 = require('md5');
+const stringSimilarity = require('string-similarity');
 const assets = require('./../lib/assets.js')
 const cache = require('./../lib/cache.js');
 
 const mvpUrl = 'https://www.hdgames.net/boss.php'
 const miniUrl = 'https://www.hdgames.net/mini.php'
 const cacheDirectory = './tmp/'
+
+const bossValue = {
+    'Angeling': 1,
+    'Golden Thief Bug': 10,
+    'Miss Tahnee': 3,
+    'Deviling': 3,
+    'Drake': 2,
+    'Strouf': 2,
+    'Goblin Leader': 8,
+    'Mistress': 20,
+    'Maya': 1,
+    'Phreeoni': 16,
+    'Eddga': 2,
+    'Osiris': 1,
+    'Moonlight Flower': 1,
+    'Orc Hero': 1,
+    'Kobold Leader': 1,
+    'Doppelganger': 18,
+    'Atroce': 1,
+    'Orc Lord': 8,
+    'Detarderous': 1,
+    'Owl Baron': 5,
+    'Bloody Knight': 1,
+    'Baphomet': 1,
+    'Dark Lord': 4,
+    'Time Holder': 3,
+    'Spashire': 11,
+    'Stormy Knight': 1,
+    'Garm': 10,
+    'Kaho': 9,
+    'Arc Angeling': 3,
+    'Wolf Grandma': 6,
+    'Bloody Murderer': 6,
+    'Lord of Death': 3,
+    'Eremes': 20,
+    'Katerina': 1,
+    'Devine': 1,
+    'Ktullanux': 8,
+    'Hill Wind': 1,
+    'Gloom Under Night': 1,
+    'Snake Gorgons': 3,
+    'Wasteland Lord': 1,
+    'Poi Tata': 1,
+};
+const bossKeys = Object.keys(bossValue);
 
 const miniLv = [83,86,88,89,92,93,95,96,98,99]
 function getBosses(url){
@@ -34,6 +80,19 @@ function getBosses(url){
           if( boss[1] == 'hatii' ) boss[1] = 'garm'; // pepega
           if( boss[1] == 'piper' ) boss[1] = 'flute_player'; // pepega
           if( boss[1] == 'gazeti' ) boss[1] = 'ice_statue'; // pepega
+          if( boss[1] == 'golden_bug' ) boss[1] = 'golden_thief_bug';
+          if( boss[1] == 'lady_tanee' ) boss[1] = 'miss_tahnee';
+          if( boss[1] == 'goblin_king' ) boss[1] = 'goblin_leader';
+          if( boss[1] == 'moonlight' ) boss[1] = 'moonlight_flower';
+          if( boss[1] == 'detale' ) boss[1] = 'detarderous';
+          if( boss[1] == 'cecil_damon' ) boss[1] = 'devine';
+          if( boss[1] == 'boitata' ) boss[1] = 'poi_tata';
+          if( boss[1] == 'kathryne_keyron' ) boss[1] = 'katerina';
+          if( boss[1] == 'firelord_kaho' ) boss[1] = 'kaho';
+          if( boss[1] == 'hill_wind_captain' ) boss[1] = 'hill_wind';
+          if( boss[1] == 'eremes_guile' ) boss[1] = 'eremes';
+          if( boss[1] == 'serpent_demon_gorgon' ) boss[1] = 'snake_gorgons';
+          if( boss[1] == 'lord-of-the-dead' ) boss[1] = 'lord_of_death';
           floorBoss.push(boss[1].toLowerCase());
         }
         res.bosses[channelId].push(floorBoss)
@@ -140,7 +199,18 @@ async function drawImage(data, type, message){
 
 function getMvp(message){
   return getBosses(mvpUrl).then(data=>{
-    return drawImage(data, 'mvp', message);
+    const values = Object.keys(data.bosses).map(ch=>{
+      return [data.bosses[ch].flat().reduce((sum, current)=>{
+        const bestMatch = stringSimilarity.findBestMatch(current.replace(/[-_]/g,' '), bossKeys).bestMatch;
+        if( bestMatch.rating < 0.5 ){
+          console.log(current)
+          console.log(bestMatch)
+          return sum+0;
+        }
+        else return sum+bossValue[bestMatch.target];
+      },0), ch]
+    })
+    return drawImage(data, 'mvp', message).then((res)=>[...res, values]);
   })
 }
 
@@ -156,11 +226,15 @@ module.exports = {
 	description: 'Endless Tower Boss List (SEA)',
 	async execute(message, args) {
     message.react('🆗');
-    getMvp(message).then(([image, updated])=>{
+    getMvp(message).then(([image, updated, values])=>{
+      console.log(updated,values)
       const embed = new Discord.MessageEmbed()
         .setTitle('ET MVP List')
         .setDescription('Updated ' + updated)
         .setURL(mvpUrl)
+        .addFields(
+          { name: 'Suggested Channels (best to worst)', value: values.sort((a,b)=>b[0]-a[0]).map(v=>v[1]).join('\n') },
+        )
         .attachFiles([new Discord.MessageAttachment(image, 'mvp.png')])
         .setImage('attachment://mvp.png')
       message.channel.send(embed)
