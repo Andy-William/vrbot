@@ -169,17 +169,17 @@ module.exports = {
       return message.channel.send('Gagal mengirim gambar, coba cek di ' + mvpUrl );
     });
     
-    getMini(message).then(([image, updated])=>{
-      const embed = new Discord.MessageEmbed()
-        .setTitle('ET Mini List')
-        .setDescription('Updated ' + updated)
-        .setURL(miniUrl)
-        .attachFiles([new Discord.MessageAttachment(image, 'mini.png')])
-        .setImage('attachment://mini.png')
-      message.channel.send(embed)
-    }).catch((err)=>{
-      console.log(err);
-      return message.channel.send('Gagal mengirim gambar, coba cek di ' + miniUrl );
-    });
+    // getMini(message).then(([image, updated])=>{
+    //   const embed = new Discord.MessageEmbed()
+    //     .setTitle('ET Mini List')
+    //     .setDescription('Updated ' + updated)
+    //     .setURL(miniUrl)
+    //     .attachFiles([new Discord.MessageAttachment(image, 'mini.png')])
+    //     .setImage('attachment://mini.png')
+    //   message.channel.send(embed)
+    // }).catch((err)=>{
+    //   console.log(err);
+    //   return message.channel.send('Gagal mengirim gambar, coba cek di ' + miniUrl );
+    // });
 	},
 };  
