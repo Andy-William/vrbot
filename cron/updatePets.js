@@ -13,9 +13,10 @@ function dbUpdateData(item){
 
 module.exports = {
 	name: 'update pet prices',
-	schedule: '30 1 * * *',
+	schedule: '* 0 * * *',
 	async action() {
-    db.get('pets', {}).then(async (res)=>{
+    // update random pets from more than 6 hours ago
+    db.getRandom('pets', {lastRequest: {$lt: new Date()/1000-60*60*6}}).then(async (res)=>{
       for( let i=0 ; i<res.length ; i++ ){
         const items = await poring.getPrice(res[i].catch)
         if( items.length == 0 ) console.log('failed', res[i].catch)

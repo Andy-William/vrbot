@@ -15,7 +15,7 @@ function dbUpdateData(card){
 
 module.exports = {
 	name: 'update card prices',
-	schedule: '* * * * *',
+	schedule: '* 4-23 * * *',
 	async action() {
     // update random card from more than 6 hours ago
     db.getRandom('cards', {lastRequest: {$lt: new Date()/1000-60*60*6}}).then(async (res)=>{

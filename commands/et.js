@@ -39,14 +39,14 @@ const bossValue = {
     'Spashire': 11,
     'Stormy Knight': 1,
     'Garm': 10,
-    'Kaho': 9,
+    'Firelord Kaho': 9,
     'Arc Angeling': 3,
     'Wolf Grandma': 6,
     'Bloody Murderer': 6,
     'Lord of Death': 3,
-    'Eremes': 20,
-    'Katerina': 1,
-    'Devine': 1,
+    'Dark Assassin Cross Eremes': 20,
+    'Dark High Wizard Katerina': 7,
+    'Dark Sniper Devine': 1,
     'Ktullanux': 8,
     'Hill Wind': 1,
     'Gloom Under Night': 1,
@@ -85,12 +85,11 @@ function getBosses(url){
           if( boss[1] == 'goblin_king' ) boss[1] = 'goblin_leader';
           if( boss[1] == 'moonlight' ) boss[1] = 'moonlight_flower';
           if( boss[1] == 'detale' ) boss[1] = 'detarderous';
-          if( boss[1] == 'cecil_damon' ) boss[1] = 'devine';
+          if( boss[1] == 'cecil_damon' ) boss[1] = 'dark_sniper_devine';
           if( boss[1] == 'boitata' ) boss[1] = 'poi_tata';
-          if( boss[1] == 'kathryne_keyron' ) boss[1] = 'katerina';
-          if( boss[1] == 'firelord_kaho' ) boss[1] = 'kaho';
+          if( boss[1] == 'kathryne_keyron' ) boss[1] = 'dark_high_wizard_katerina';
           if( boss[1] == 'hill_wind_captain' ) boss[1] = 'hill_wind';
-          if( boss[1] == 'eremes_guile' ) boss[1] = 'eremes';
+          if( boss[1] == 'eremes_guile' ) boss[1] = 'dark_assassin_cross_eremes';
           if( boss[1] == 'serpent_demon_gorgon' ) boss[1] = 'snake_gorgons';
           if( boss[1] == 'lord-of-the-dead' ) boss[1] = 'lord_of_death';
           floorBoss.push(boss[1].toLowerCase());
@@ -227,7 +226,6 @@ module.exports = {
 	async execute(message, args) {
     message.react('🆗');
     getMvp(message).then(([image, updated, values])=>{
-      console.log(updated,values)
       const embed = new Discord.MessageEmbed()
         .setTitle('ET MVP List')
         .setDescription('Updated ' + updated)
