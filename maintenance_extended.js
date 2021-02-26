@@ -7,4 +7,3 @@ module.exports = {
     announce("🚧 Maintenance diundur sampai jam 18:00 WIB 🚧")
 	},
 };
-

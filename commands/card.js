@@ -2,7 +2,7 @@ const db = require('./../lib/mongo.js');
 const fetch = require('node-fetch');
 const cache = require('./../lib/cache.js');
 
-const cardUrl = "https://poring.life/?&server=el&q=cards"
+const cardUrl = "https://poring.life/?&server=el&q=gramdust"
 
 const colorMap = {
   '#727272': '⬜',

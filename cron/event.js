@@ -2,8 +2,8 @@ const announce = require('./../lib/announce.js');
 
 module.exports = {
 	name: 'Loli Ruri Shadow reminder',
-	schedule: '0 12 7-13 1 *',
+	schedule: '0 10,12,19,21,23 16 2 *',
 	async action() {
-    announce("Rainbow Light Spirit muncul di Mjolnir Mountain! Drop **Pet Egg, Colorful Shell, dan random Pet Item**") 
+    announce("God of Wealth muncul di Prontera, Geffen, Morroc, dan Payon! Drop **Zeny**") 
   },
 };

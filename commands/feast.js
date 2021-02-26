@@ -64,7 +64,7 @@ module.exports = {
     else{
       result = (await db.getRandom('feast', {type: typeResult}))[0].name;
     }
-    let str = "<:feast:780014200038359040> Feast Gacha Nov 2020 Simulator <:feast:780014200038359040>\n";
+    let str = "<:feast:780014200038359040> Feast Gacha Simulator <:feast:780014200038359040>\n";
     str += `${message.author.toString()} dapat **${result}**${typeResult.match(/^New/)?` (${typeResult})`:''}\n`;
 
     await message.channel.send(str).catch((err)=>console.log(err));

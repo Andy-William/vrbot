@@ -25,7 +25,7 @@ module.exports = {
           let updates = []
           while( bossData = bossRegex.exec(data) ){
             const chData = {
-              level: bossData[1].replace(/\s/g,''),
+              level: bossData[1].replace(/\s/g,'').toUpperCase(),
               boss: bossData[2],
               actor: message.author.username,
               id: message.guild.id,

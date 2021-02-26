@@ -2,6 +2,7 @@ const helpMessage = `Commands Help ❓
 \`\`\`
 !card ➜ cek harga kartu
 !et ➜ Endless Tower
+!mvp ➜ MVP Ranking
 !oracle !ora ➜ Oracle dungeon
 !pet ➜ cek harga tangkap pet
 !smvp ➜ SMVP minggu ini

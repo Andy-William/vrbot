@@ -5,19 +5,25 @@ module.exports = {
 	name: 'pvp rank day reminder',
 	schedule: '0 12 * * Sat',
 	async action() {
-    const weekNum = currentWeek.week(new Date());
-    if( (weekNum-1)%10 >= 4 ) announce("<:pvpr:678097570618408961> Hari ini ada **PvP Rank** <:pvpr:678097570618408961>")
+    return;
+    const weekCycle= (currentWeek.week(new Date())-2)%10;
+    if( weekCycle >= 7 ) announce("<:pvpr:678097570618408961> Hari ini ada **Holy Ground War** <:pvpr:678097570618408961>")
+    else if( weekCycle >= 3 ) announce("<:pvpr:678097570618408961> Hari ini ada **PvP Rank** <:pvpr:678097570618408961>")
 	},
 };
 
 /*
-have pvp:
-2645
-2646
-2647
-2648
-2649
-2650
-
+have pvpr:
 2655
+2656
+2657
+2658
+
+have holy war:
+2659
+2660
+2661
+
+have tournament:
+2665
 */
