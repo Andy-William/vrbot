@@ -3,7 +3,6 @@ const Canvas = require('canvas');
 const Discord = require('discord.js');
 const fs = require('fs');
 const md5 = require('md5');
-const stringSimilarity = require('string-similarity');
 const assets = require('./../lib/assets.js')
 const cache = require('./../lib/cache.js');
 const mvp = require('./../lib/mvp.js');
@@ -12,6 +11,7 @@ const mvpUrl = 'https://www.hdgames.net/boss.php'
 const miniUrl = 'https://www.hdgames.net/mini.php'
 const cacheDirectory = './tmp/'
 
+const mvpLv = Array.from(Array(30).keys()).map(i=>Math.floor((i+1)*3+(i+1)/3))
 const miniLv = [83,86,88,89,92,93,95,96,98,99]
 function getBosses(url){
   const cached = cache.get(url)
@@ -108,7 +108,7 @@ async function drawImage(data, type, message){
     ctx.lineTo(offset, canvas.height-footerSize);
     ctx.stroke();
     const columnLength = (entries[0][1][i].length*imageSize)+2*horizontalBuffer;
-    ctx.fillText((type=='mvp'?Math.floor((i+1)*3+(i+1)/3):miniLv[i])+'F', offset+columnLength/2, titleSize+headerSize/2);
+    ctx.fillText((type=='mvp'?mvpLv[i]:miniLv[i])+'F', offset+columnLength/2, titleSize+headerSize/2);
     offset += columnLength;
   }
 
@@ -152,16 +152,20 @@ async function drawImage(data, type, message){
   return [buf, data.updated];
 }
 
-async function getMvp(message){
+async function getMvp(message, range){
   const data = await getBosses(mvpUrl);
   const floors = Object.keys(data.bosses);
   let values = [];
   for( let i=0 ; i<floors.length ; i++ ){
     const floor = floors[i];
-    const bosses = data.bosses[floor].flat();
+    const bosses = data.bosses[floor];
     let sum = 0;
     for( let j=0 ; j<bosses.length ; j++ ){
-      sum += await mvp.getValue(bosses[j])
+      if( mvpLv[j] >= range[0] && mvpLv[j] <= range[1] ){
+        for( let k=0 ; k<bosses[j].length ; k++ ){
+          sum += await mvp.getValue(bosses[j][k])
+        }
+      }
     }
     values.push([sum, floor]);
   }
@@ -180,7 +184,11 @@ module.exports = {
 	description: 'Endless Tower Boss List (SEA)',
 	async execute(message, args) {
     message.react('🆗');
-    getMvp(message).then(([image, updated, values])=>{
+    let range = [1,100]
+    if( args ){
+      range = [parseInt(args[0])||1, parseInt(args[1]||100)]
+    }
+    getMvp(message, range).then(([image, updated, values])=>{
       console.log(values);
       const embed = new Discord.MessageEmbed()
         .setTitle('ET MVP List')
@@ -188,7 +196,7 @@ module.exports = {
         .setURL(mvpUrl)
         .addFields(
           { 
-            name: 'Suggested Channels (best to worst) with score',
+            name: 'Suggested Channels from floor ' + range[0] + ' to ' + range[1] + ' (with score)',
             value: values.sort((a,b)=>b[0]-a[0]).map(v=>`${v[1]} - ${Math.round(v[0])}`).join('\n')
           },
         )

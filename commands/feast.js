@@ -4,21 +4,21 @@ const odds = {
   "New Costume": 2,
   "New Headwear": 10,
   "Shard": 10,
-  "Past Costume": 0.2,
-  "Past Headwear": 1,
-  "Headgear": 0.1,
-  "Weapon": 0.1,
-  "Premium": 0.2,
+  // "Past Costume": 0.2,
+  // "Past Headwear": 1,
+  // "Headgear": 0.1,
+  // "Weapon": 0.1,
+  // "Premium": 0.2,
   "BDB": 10,
   "Card": 5,
-  "Contact": 4.2,
-  "Hairstyle": 4.2,
+  "Contact": 4,
+  "Hairstyle": 4,
   "Food": 5,
-  "Currency": 15,
+  "Currency": 20,
   "Pet": 5,
   "Exp": 5,
-  "Praying Card": 6,
-  "Zeny+Page": 17
+  "Praying Card": 5,
+  "Zeny+Page": 15
 }
 
 // true if category have not uniform odds
