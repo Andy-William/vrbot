@@ -13,7 +13,8 @@ const colorMap = {
 const gramMap = {
   '⬜': 10,
   '🟩': 20,
-  '🟦': 50
+  '🟦': 50,
+  '🟪': 100
 }
 
 // convert format

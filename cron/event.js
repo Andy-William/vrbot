@@ -2,8 +2,8 @@ const announce = require('./../lib/announce.js');
 
 module.exports = {
 	name: 'Loli Ruri Shadow reminder',
-	schedule: '0 10,12,19,21,23 16 2 *',
+	schedule: '0 19 10-16 4 *',
 	async action() {
-    announce("God of Wealth muncul di Prontera, Geffen, Morroc, dan Payon! Drop **Zeny**") 
+    announce("Phen, Marc, Marina muncul di South Gate! Drop **Deepsea Chest, Shinewhole Aquarius**") 
   },
 };
