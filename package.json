@@ -10,11 +10,9 @@
     "md5": "^2.2.1",
     "mongodb": "^3.5.9",
     "node-cache": "^5.1.2",
-    "node-cron": "^2.0.3",
+    "node-cron": "^3.0.0",
     "node-fetch": "^2.6.1",
-    "string-similarity": "^4.0.0",
-    "table-scraper": "^1.0.3",
-    "tabletojson": "^2.0.4"
+    "string-similarity": "^4.0.0"
   },
   "license": "MIT",
   "engines": {
