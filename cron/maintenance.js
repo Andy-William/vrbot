@@ -2,9 +2,9 @@ const announce = require('./../lib/announce.js');
 
 module.exports = {
 	name: 'maintenance reminder',
-	schedule: '0 22 27 3 *',
+	schedule: '0 11 19 4 *',
 	async action() {
-    announce("🚧 Saatnya maintenance! Menurut jadwal akan selesai pukul 00:00 WIB! 🚧")
+    announce("🚧 Saatnya maintenance! Menurut jadwal akan selesai pukul 18:00 WIB! 🚧")
 	},
 };
 

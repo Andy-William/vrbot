@@ -40,7 +40,13 @@ module.exports = {
         }
         break;
       case 'oracle':
-        if( args[1] == '' ) return message.reply('invalid params. format: `sudo oracle url`');
+        if( args[1] == '' ) return message.reply('invalid params. format: `sudo oracle url/reset`');
+        if( args[1] == 'reset' ){
+          db.delete('oracle', {created_at: reset.nextReset()-1}).then(()=>{
+            message.react('✅');
+            message.channel.send(`oracle reseted`);
+          })
+        }
         else{
           const data = {
             url: args[1],
