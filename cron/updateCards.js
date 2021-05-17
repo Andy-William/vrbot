@@ -20,17 +20,19 @@ module.exports = {
     // update random card from more than 6 hours ago
     db.getRandom('cards', {lastRequest: {$lt: new Date()/1000-60*60*6}}).then(async (res)=>{
       for( let i=0 ; i<res.length ; i++ ){
-        const cards = await poring.getPrice(res[i].name)
+        const cards = await poring.getPrice(res[i].name).catch(e=>{
+          console.log(e);
+          return [];
+        });
         if( cards.length == 0 ) console.log('failed', res[i].name)
         cards.forEach(card=>{
           card = dbUpdateData(card)
           db.update('cards', card.query, card.data).then(res=>{
             if( res.matchedCount == 1 ) console.log('updated', card.query, res.modifiedCount)
             else console.log('failed', card.query)
-          });
+          }).catch(e=>console.log(e));
         })
-        await new Promise(r => setTimeout(r, 5000));
       }
-    })
+    }).catch(e=>console.log(e))
 	},
 };
