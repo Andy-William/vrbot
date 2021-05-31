@@ -21,6 +21,8 @@ client.on('message', (message) => {
   
   try{
     console.log(log)
+    if( message.author.bot ) return;
+    
     // pamernoko
     if( message.channel.id == process.env.PAMERNOKO_CHANNEL_ID ){
       if( message.author.bot || !message.attachments.first() ) message.delete();
@@ -29,11 +31,7 @@ client.on('message', (message) => {
       }
       return;
     }
-    if( message.author.id == '625903832500666398' && message.content.startsWith('untuk sementara Synthesis Offhand sedang dalam Maintenance')){
-      message.channel.send('<@!232347895997792256>')
-    }
 
-    if( message.author.bot ) return;
     if ( message.content.startsWith(prefix) ){
       const args = message.content.slice(1).split(/ +/); // split arguments
       const commandName = args.shift().toLowerCase();    // first argument is command name
@@ -52,7 +50,7 @@ client.on('message', (message) => {
       command.execute(message, match.slice(1)).catch(errorHandler);
     }
   }catch(err){
-    // console.log(err);
+    console.log(err);
     let msg;
     try{
       msg = err.message;
@@ -85,5 +83,10 @@ client.on("guildCreate", (guild) => {
 client.on("guildDelete", (guild) => {
   client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(`Left guild: ${guild.name}`);
 })
+
+process.on('unhandledRejection', error => {
+    console.log(error);
+    client.channels.cache.get(process.env.DEV_CHANNEL_ID).send("error sesuatu cek log! <@273387024856383489>");
+});
 
 require('./web.js');
