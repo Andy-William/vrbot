@@ -15,7 +15,7 @@ client.on('message', (message) => {
       msg = err;
     }
     message.reply(msg||'ada error, coba lagi aja');
-    client.channels.get(process.env.DEV_CHANNEL_ID).send(log);
+    client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(log);
     client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(msg);
   }
   
@@ -66,12 +66,6 @@ client.on('message', (message) => {
 
 client.login(process.env.DISCORD_BOT_TOKEN).then(()=>{
   require('./lib/cron.js').init();
-  
-  setTimeout(()=>{
-    client.guilds.cache.forEach((guild) => {
-        console.log(guild.name || guild.id );
-    });
-  }, 1000)
 }).catch(console.error);  
 
 client.on('error', (err) => console.log(err));

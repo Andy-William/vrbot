@@ -6,7 +6,8 @@ module.exports = {
 	async execute(message, args) {
     try{
       if( message.guild ) return;
-      if( !args[0] ) message.reply('need id')
+      if( !args[0] ) return message.reply('need id');
+      if( !args[0].match(/^\d+$/) ) return message.reply('invalid id');
       const sender = message.author.id
       console.log(sender)
       let key = {

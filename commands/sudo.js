@@ -1,7 +1,6 @@
 const db = require('./../lib/mongo.js');
 const reset = require('./../lib/time.js');
 
-const Discord = require('discord.js')
 const fetch = require('node-fetch');
 const Canvas = require('canvas');
 const md5 = require('md5');
@@ -78,20 +77,16 @@ module.exports = {
           })
         }
         break;
-      case 'img':
-        const url = args[1];
-        getBase64Image(url).then(res=>message.reply('original hash: ' + md5(res)));
-        const img = await Canvas.loadImage(url);
-        const canvas = Canvas.createCanvas(128, 128);
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, img.width, img.height,
-                           0, 0, canvas.width, canvas.height);
-        const data = canvas.toDataURL('image/png')
-        message.reply('converted hash: '+ md5(data));
-        const attachment = new Discord.Attachment(canvas.toBuffer(), 'converted.png')
-        console.log(canvas.toBuffer())
-        message.channel.send('converted', attachment)
-      case 'chat':
+      case 'guildlist':
+        let guilds = [];
+        require('./../lib/bot.js').client.guilds.cache.forEach((guild) => {
+          guilds.push(guild.name)
+        });
+        const str = guilds.join("\n");
+        const msgs = str.match(/.{1,1988}(\n|$)/gs); // split message every 2000 chars
+        for( let i=0 ; i<msgs.length ; i++ ){
+          await message.channel.send("```json\n"+msgs[i]+"```").catch((err)=>console.log(err));
+        }
         break;
     }
 	},

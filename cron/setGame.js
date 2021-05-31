@@ -1,16 +1,8 @@
 const client = require('./../lib/bot.js').client;
 
 const games = [
-  'king poring !card !poring !nolan',
-  'event !reminder',
-  'farming devil wing !smvp',
-  'tangkap tangkap !pet',
-  'GB ET dong !et',
-  'Endless Tower !et',
-  'Valhalla Ruins !vr',
-  'rip bcc !extract',
-  'gacha tengah !feast',
-  'ora nm -1 !oracle'
+  '!help untuk list command',
+  '!giveaway'
 ]
 
 function setRandomGame(){
