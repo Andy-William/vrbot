@@ -1,7 +1,7 @@
 const client = require('./../lib/bot.js').client;
 
 const games = [
-  '!help untuk list command',
+  // '!help untuk list command',
   '!giveaway'
 ]
 

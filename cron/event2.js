@@ -2,8 +2,9 @@ const announce = require('./../lib/announce.js');
 
 module.exports = {
 	name: 'Loli Ruri Shadow reminder',
-	schedule: '0 20 1-7 2 *',
+	schedule: '0 19 11-28 6 Fri,Sat,Sun',
 	async action() {
-    // announce("Time Rift muncul di Payon South! Drop **Hunt Proof**") 
+    announce("Midsummer Night's Elves muncul di South Gate! Drop **Elf Treasure**")
+    announce("Type **!giveaway** for giveaway")
   },
 };

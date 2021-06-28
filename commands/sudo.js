@@ -12,7 +12,7 @@ module.exports = {
 	name: 'sudo',
 	description: 'Admin Stuff',
 	async execute(message, args) {
-    if( message.guild.id != '555311795771015189' ) return;
+    if( message.channel.id != '555311795771015193' ) return;
     switch(args[0]){
       case 'vr':
         if( !args[1] || args[1] == '' ) return message.reply('invalid params. format: `sudo vr bosses`');
@@ -64,16 +64,15 @@ module.exports = {
             message.channel.send(`ET reseted`);
           })
         }
-        else if( args[1] != 'mini' && args[1] != 'mvp' ) return message.reply('invalid params. format: `sudo et mini/mvp url` or `sudo et reset`');
+        else if( !args[1] ) return message.reply('invalid params. format: `sudo et url` or `sudo et reset`');
         else{
           const data = {
-            type: args[1],
-            url: args[2],
+            url: args[1],
             created_at: reset.nextReset()-1
           }
-          db.update('et', {type: args[1]}, data, {upsert: true}).then(()=>{
+          db.update('et', {}, data, {upsert: true}).then(()=>{
             message.react('✅');
-            return message.channel.send(`ET(${args[1]}) set to <${args[2]}>`);
+            return message.channel.send(`ET set to <${args[1]}>`);
           })
         }
         break;

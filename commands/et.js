@@ -6,6 +6,7 @@ const md5 = require('md5');
 const assets = require('./../lib/assets.js')
 const cache = require('./../lib/cache.js');
 const mvp = require('./../lib/mvp.js');
+const db = require('./../lib/mongo.js');
 
 const mvpUrl = 'https://www.hdgames.net/boss.php'
 const miniUrl = 'https://www.hdgames.net/mini.php'
@@ -183,7 +184,13 @@ module.exports = {
   alias: '^ett+$',
 	description: 'Endless Tower Boss List (SEA)',
 	async execute(message, args) {
-    message.react('🆗');
+    message.react('🆗').catch(e=>console.log(e));
+    const dbImage = await db.get('et').then(res => res[0]) || {};
+    if( dbImage.created_at > new Date ){
+      image = dbImage.url;
+      return message.channel.send({files: [image]})
+    }
+
     let range = [1,100]
     if( args ){
       range = [parseInt(args[0])||1, parseInt(args[1]||100)]

@@ -17,6 +17,7 @@ const helpMessage = `Commands Help ❓
 
 !help ➜ list command
 !invite ➜ link invite bot\`\`\`
+Support: https://discord.gg/Dnu9w6tkrr
 `
 
 module.exports = {
