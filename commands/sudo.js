@@ -39,7 +39,7 @@ module.exports = {
         }
         break;
       case 'oracle':
-        if( args[1] == '' ) return message.reply('invalid params. format: `sudo oracle url/reset`');
+        if( !args[1] || args[1] == '' ) return message.reply('invalid params. format: `sudo oracle url/reset`');
         if( args[1] == 'reset' ){
           db.delete('oracle', {created_at: reset.nextReset()-1}).then(()=>{
             message.react('✅');
@@ -58,7 +58,7 @@ module.exports = {
         }
         break;
       case 'cake':
-        if( args[1] == '' ) return message.reply('invalid params. format: `sudo cake url/reset`');
+        if( !args[1] || args[1] == '' ) return message.reply('invalid params. format: `sudo cake url/reset`');
         if( args[1] == 'reset' ){
           db.delete('cake', {created_at: reset.nextReset()-1}).then(()=>{
             message.react('✅');
@@ -83,7 +83,7 @@ module.exports = {
             message.channel.send(`ET reseted`);
           })
         }
-        else if( !args[1] ) return message.reply('invalid params. format: `sudo et url` or `sudo et reset`');
+        else if( !args[1] || args[1] == '' ) return message.reply('invalid params. format: `sudo et url` or `sudo et reset`');
         else{
           const data = {
             url: args[1],
