@@ -57,6 +57,25 @@ module.exports = {
           return message.channel.send(`Oracle set to <${args[1]}>`);
         }
         break;
+      case 'cake':
+        if( args[1] == '' ) return message.reply('invalid params. format: `sudo cake url/reset`');
+        if( args[1] == 'reset' ){
+          db.delete('cake', {created_at: reset.nextReset()-1}).then(()=>{
+            message.react('✅');
+            message.channel.send(`cake reseted`);
+          })
+        }
+        else{
+          const data = {
+            url: args[1],
+            created_at: reset.nextReset()-1
+          }
+          db.update('cake', {}, data, {upsert: true}).then(()=>{
+            message.react('✅');
+          })
+          return message.channel.send(`Cake set to <${args[1]}>`);
+        }
+        break;
       case 'et':
         if( args[1] == 'reset' ){
           db.delete('et', {created_at: reset.nextReset()-1}).then(()=>{
