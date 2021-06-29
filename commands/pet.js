@@ -26,9 +26,10 @@ module.exports = {
     const longestNameLength = Math.max(...Object.values(pets).map(pet=> pet.name.length))
     const longestItemLength = Math.max(...Object.keys(pets).map(item=> item.length))
     const longestPriceLength = Math.max(...Object.values(pets).map(pet=> pet.price.toString().length))
-    
+
     let str = "Pet Name".padEnd(longestNameLength) + " | " + "Catch Item".padEnd(longestItemLength) + " | Price" + " ".repeat(longestPriceLength*2+3) + "\n"
     str += "-".repeat(str.length-1) + "\n"
+    str = "Pet capture item prices - Powered by poring.life\n" + str
 
     Object.entries(pets).forEach(([item, pet])=>{
       str += pet.name.padEnd(longestNameLength) + " | "

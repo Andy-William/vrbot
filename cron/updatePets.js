@@ -13,7 +13,7 @@ function dbUpdateData(item){
 
 module.exports = {
 	name: 'update pet prices',
-	schedule: '* 0 * * *',
+	schedule: '1-59/2 * * * *',
 	async action() {
     // update random pets from more than 6 hours ago
     db.getRandom('pets', {lastRequest: {$lt: new Date()/1000-60*60*6}}).then(async (res)=>{

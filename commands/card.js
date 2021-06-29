@@ -5,16 +5,16 @@ const cache = require('./../lib/cache.js');
 const cardUrl = "https://poring.life/?&server=el&q=gramdust"
 
 const colorMap = {
-  '#727272': '⬜',
-  '#66BB6A': '🟩',
-  '#90caf9': '🟦',
-  '#BD93F9': '🟪'
+  'white': '⬜',
+  'green': '🟩',
+  'blue': '🟦',
+  'purple': '🟪'
 }
 const gramMap = {
-  '⬜': 10,
-  '🟩': 20,
-  '🟦': 50,
-  '🟪': 100
+  'white': 10,
+  'green': 20,
+  'blue': 50,
+  'purple': 100
 }
 
 // convert format
@@ -49,44 +49,29 @@ module.exports = {
     if( args.match(/haute|craft/i) ) query.color.$in.push('haute');
 
     if( query.color.$in.length == 0 ){ // get cheap cards
-      const cards = cache.get(cardUrl) || await fetch(cardUrl).then(res => res.text()).then(data=>{
-        const colorRegex = /border-color:(#[\dA-F]+)/gi;
-        const nameRegex = /x.com\/i[^<]*<h6>([^<]*)/g;
-        const priceRegex = /Price<.*?<span>([^<]*)/gs;
-        const volumeRegex = /Quantity<.*?<span>([^<]*)/gs;
-        const lastUpdatedRegex = /Last checked([^<]*)/g;
-        let cards = [];
-        let match;
-        let minGram = 100000000;
-        let bulkUpdateQuery = []; // update the database
+      let cards = cache.get('gramdust')
 
-        while( match = colorRegex.exec(data) ) cards.push({color: colorMap[match[1]]});
-        for( let i=0 ; match = nameRegex.exec(data) ; i++ ) cards[i].name = match[1];
-        for( let i=0 ; match = priceRegex.exec(data) ; i++ ){
-          cards[i].price = parseInt(match[1].replace(/,/g,''));
-          const price = cards[i].price;
-          const gram = gramMap[cards[i].color];
-          if( gram && price ){
-            cards[i].gram = (price+10000)/gram;
-            if( cards[i].gram < minGram ) minGram = cards[i].gram;
-          }
-        }
-        for( let i=0 ; match = volumeRegex.exec(data) ; i++ ) cards[i].volume = match[1];
-        for( let i=0 ; match = lastUpdatedRegex.exec(data) ; i++ ) cards[i].lastRequest = Number(new Date(match[1]+' +08:00'))/1000;
+      if( !cards ){
+        // purchasable card only
+        cards = await db.get('cards', {lastRequest: {$exists: true}});
         
-        cards.forEach((card)=>{
-          if( card.gram == minGram ) card.minGram = true;
-          bulkUpdateQuery.push(dbUpdateData(card))
-        })
-        cache.set(cardUrl, cards, 600);
-        db.bulkUpdate('cards', bulkUpdateQuery);
-        return cards;
-      }).catch((err)=>console.log(err));
+        // [zeny per gram, price, color, name]
+        cards = cards.map(card=>{
+          return {
+            gram: (card.price+10000)/gramMap[card.color],
+            price: card.price,
+            color: colorMap[card.color],
+            name: card.name
+          }
+        }).sort((a, b)=>{return a.gram-b.gram})
+        cards = cards.slice(0,30)
+        cache.set('gramdust', cards, 600);
+      }
 
-      str = "Cheap Card Prices - Powered by poring.life\n👍: best gram dust value\n";
+      str = "Cheap Card Prices for Gram Dust - Powered by poring.life\n";
       if( cards ){
         cards.forEach((card)=>{
-          str += `${card.color}${(card.price).toLocaleString()} - ${card.name}${card.minGram?' 👍':''}\n`
+          str += `${card.color}${(card.price).toLocaleString()} - ${card.name}\n`
         })
       }
     }

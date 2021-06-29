@@ -1,5 +1,6 @@
 const helpMessage = `Commands Help ❓
 \`\`\`
+!cake ➜ battle of cake
 !card ➜ cek harga kartu
 !et ➜ Endless Tower
 !mvp ➜ MVP Ranking
@@ -16,7 +17,10 @@ const helpMessage = `Commands Help ❓
 !reminder ➜ Pengingat event
 
 !help ➜ list command
-!invite ➜ link invite bot\`\`\`
+!invite ➜ link invite bot
+
+Item prices are powered by poring.life
+\`\`\`
 Support: https://discord.gg/Dnu9w6tkrr
 `
 
@@ -24,7 +28,6 @@ module.exports = {
 	name: 'help',
 	description: 'List command',
 	async execute(message, args) {
-
     message.reply(helpMessage)
 	},
 };

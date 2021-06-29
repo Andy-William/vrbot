@@ -7,32 +7,25 @@ function dbUpdateData(card){
     data: {
       price: card.price,
       lastRequest: card.lastRequest,
-      volume: card.volume == 'Sold Out' ? 0 : card.volume,
-      snapping: -1
+      volume: card.volume
     }
   }
 }
 
 module.exports = {
 	name: 'update card prices',
-	schedule: '* 4-23 * * *',
+	schedule: '*/15 * * * *',
 	async action() {
-    // update random card from more than 6 hours ago
-    db.getRandom('cards', {lastRequest: {$lt: new Date()/1000-60*60*6}}).then(async (res)=>{
-      for( let i=0 ; i<res.length ; i++ ){
-        const cards = await poring.getPrice(res[i].name).catch(e=>{
-          console.log(e);
-          return [];
-        });
-        if( cards.length == 0 ) console.log('failed', res[i].name)
-        cards.forEach(card=>{
-          card = dbUpdateData(card)
-          db.update('cards', card.query, card.data).then(res=>{
-            if( res.matchedCount == 1 ) console.log('updated', card.query, res.modifiedCount)
-            else console.log('failed', card.query)
-          }).catch(e=>console.log(e));
-        })
-      }
-    }).catch(e=>console.log(e))
+    const data = await poring.getPrice('card').catch(e=>{
+      console.log(e);
+      return [];
+    });
+    const data2 = await poring.getPrice('Chef\'s Blessing').catch(e=>{
+      console.log(e);
+      return [];
+    });
+
+    updates = data.concat(data2).map(d=>dbUpdateData(d))
+    const res = await db.bulkUpdate('cards', updates, false)
 	},
 };
