@@ -1,7 +1,7 @@
 const reminder = require('./../lib/reminder.js');
 
 function usage(message){
-  message.reply('Usage: `reminder <spasi> on/off`');
+  message.reply('Usage: `reminder <space> on/off`');
 }
 
 module.exports = {
@@ -12,11 +12,11 @@ module.exports = {
     
     if( args[0].toLowerCase() === 'on' ){
       reminder.set(message.channel.id, true);
-      message.channel.send('Reminder dinyalakan di channel ini.')
+      message.channel.send('Reminder turned on for this channel.')
     }
     else if( args[0].toLowerCase() === 'off' ){
       reminder.set(message.channel.id, false);
-      message.channel.send('Reminder dimatikan di channel ini.')
+      message.channel.send('Reminder turned off for this channel.')
     }
     else usage(message);
 	},

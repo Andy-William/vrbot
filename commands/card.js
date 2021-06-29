@@ -64,7 +64,7 @@ module.exports = {
             name: card.name
           }
         }).sort((a, b)=>{return a.gram-b.gram})
-        cards = cards.slice(0,30)
+        cards = cards.slice(0,20)
         cache.set('gramdust', cards, 600);
       }
 
@@ -74,6 +74,7 @@ module.exports = {
           str += `${card.color}${(card.price).toLocaleString()} - ${card.name}\n`
         })
       }
+      str += 'Use \'card <space> color\' to get cards from specific color'
     }
     else{
       console.log('querying data...');

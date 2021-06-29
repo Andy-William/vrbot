@@ -51,7 +51,7 @@ module.exports = {
     }
 
     return message.channel.send({files: [image]}).catch((err)=>{
-      return message.channel.send('Gagal mengirim gambar, coba cek di ' + oracleUrl );
+      return message.channel.send('Failed to send picture, try checking ' + oracleUrl );
     })
 	},
 };

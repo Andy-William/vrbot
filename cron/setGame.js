@@ -1,8 +1,7 @@
 const client = require('./../lib/bot.js').client;
 
 const games = [
-  // '!help untuk list command',
-  '!giveaway'
+  '!help for command list'
 ]
 
 function setRandomGame(){

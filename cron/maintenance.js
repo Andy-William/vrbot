@@ -4,7 +4,7 @@ module.exports = {
 	name: 'maintenance reminder',
 	schedule: '0 10 29 6 *',
 	async action() {
-    announce("🚧 Saatnya maintenance! Menurut jadwal akan selesai pukul 17:00 WIB! 🚧")
+    announce("🚧 Maintenance time! It will be done at 17:00 server time! 🚧")
 	},
 };
 

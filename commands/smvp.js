@@ -44,7 +44,7 @@ module.exports = {
   description: "Special MVP Info",
   async execute(message, args) {
     const weekNum = currentWeek.week(new Date());
-    let str = "SMVP minggu ini:\n";
+    let str = "SMVP for this week:\n";
     Object.entries(smvpList).forEach(([location, smvps]) => {
       str += location + ": **" + smvps[weekNum % smvps.length] + "**\n";
     });

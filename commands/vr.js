@@ -28,7 +28,7 @@ module.exports = {
       }         
     })
 
-    str =  str || (args[0] == 'all' ? 'belum ada' : 'Gunakan `!setvr` untuk set bosnya\nGunakan `!vr all` untuk cek semua channel\nGunakan `!vr all mistres|eremes` untuk cari mistress atau eremes')
+    str =  str || (args[0] == 'all' ? 'none yet' : 'Use `!setvr` to set the bosses\nUse `!vr all` to check all channels\nUse `!vr all mistres` to find Mistress')
 
     let msgs = str.match(/.{1,2000}(\n|$)/gs); // split message every 2000 chars
     for( let i=0 ; i<msgs.length ; i++ ){

@@ -212,7 +212,7 @@ module.exports = {
       message.channel.send(embed)
     }).catch((err)=>{
       console.log(err);
-      return message.channel.send('Gagal mengirim gambar, coba cek di ' + mvpUrl );
+      return message.channel.send('Failed to send picture, try checking ' + mvpUrl );
     });
     
     // getMini(message).then(([image, updated])=>{

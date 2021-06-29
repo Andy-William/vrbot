@@ -4,9 +4,9 @@ module.exports = {
 	name: 'setvr',
 	description: 'Set boss VR',
 	async execute(message, args) {
-    if( !message.guild ) return message.reply('Tidak bisa DM!');
+    if( !message.guild ) return message.reply('No DM for this command!');
     if( args.length < 2 ){
-      return message.reply('Usage: `setvr <spasi> bossnya` atau `setvr <spasi> channel <spasi> bossnya`')
+      return message.reply('Usage: `setvr <space> boss names` or `setvr <space> channel <space> boss names`')
     }
     
     const channel = (args[0].match(/(ID|PH|TH|CN|EN|VN)\d{1,3}/i)||[])[0];

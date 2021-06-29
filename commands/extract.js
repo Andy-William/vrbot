@@ -21,10 +21,10 @@ module.exports = {
   alias: '^re$',
 	description: 'Oracle Mirror Extraction Simulator',
 	async execute(message, args) {
-    if( !args[0] ) return message.reply('Usage: `extract <spasi> level`');
+    if( !args[0] ) return message.reply('Usage: `extract <space> level`');
     const level = parseInt(args[0]);
 
-    if( !(level >= 1 && level <= 15) ) return message.reply('level harus 1-15');
+    if( !(level >= 1 && level <= 15) ) return message.reply('Invalid level. Should be from 1-15');
 
     const odd = odds[level];
     let random = Math.random() * 200;
@@ -38,7 +38,7 @@ module.exports = {
       random -= current;
     }
 
-    let str = `<:ExtractLightCrystal:771330344443838474> ${message.author.toString()} dapat **+${result}**/+${level}${result==level?', gratz!':''} <:ExtractLightCrystal:771330344443838474>\n`;
+    let str = `<:ExtractLightCrystal:771330344443838474> ${message.author.toString()} got **+${result}**/+${level}${result==level?', gratz!':''} <:ExtractLightCrystal:771330344443838474>\n`;
 
     await message.channel.send(str).catch((err)=>console.log(err));
 	},

@@ -4,11 +4,6 @@ const odds = {
   "New Costume": 2,
   "New Headwear": 10,
   "Shard": 10,
-  // "Past Costume": 0.2,
-  // "Past Headwear": 1,
-  // "Headgear": 0.1,
-  // "Weapon": 0.1,
-  // "Premium": 0.2,
   "BDB": 10,
   "Card": 5,
   "Contact": 4,
@@ -65,7 +60,7 @@ module.exports = {
       result = (await db.getRandom('feast', {type: typeResult}))[0].name;
     }
     let str = "<:feast:780014200038359040> Feast Gacha Simulator <:feast:780014200038359040>\n";
-    str += `${message.author.toString()} dapat **${result}**${typeResult.match(/^New/)?` (${typeResult})`:''}\n`;
+    str += `${message.author.toString()} got **${result}**${typeResult.match(/^New/)?` (${typeResult})`:''}\n`;
 
     await message.channel.send(str).catch((err)=>console.log(err));
 	},

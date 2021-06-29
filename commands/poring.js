@@ -23,7 +23,7 @@ module.exports = {
     const white = (args.match(/w/ig)||[]).length;
     const green = (args.match(/g/ig)||[]).length;
     const blue = (args.match(/b/ig)||[]).length;
-    if( white + green + blue != 3 ) return await message.reply('Usage: `poring <spasi> kombinasi kartu (W/G/B)`\nContoh: `WWG`')
+    if( white + green + blue != 3 ) return await message.reply('Usage: `poring <space> color combination (W/G/B)`\nExample: `poring WWG`')
 
     const chance = chances[''+white+green+blue];
     let random = Math.random() * 100;
@@ -35,7 +35,7 @@ module.exports = {
     const card = (await db.getRandom('cards', {color: color}))[0];
 
     let str = "🃏 King Poring Card Reproduction Simulator 🃏\n";
-    str += `${message.author.toString()} dapat **${card.name}** - harganya ${(card.price||0).toLocaleString()}\n`;
+    str += `${message.author.toString()} got **${card.name}** - priced ${(card.price||0).toLocaleString()}\n`;
 
     await message.channel.send(str).catch((err)=>console.log(err));
 	},
