@@ -14,9 +14,14 @@ client.on('message', (message) => {
     catch(_){
       msg = err;
     }
-    message.reply(msg||'ada error, coba lagi aja');
+    console.log(msg,err)
     client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(log);
     client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(msg);
+    message.reply(msg||'got error, try again').catch((err)=>{
+        console.log(err);
+        message.author.send('got error, I probably don\'t have write access to the channel')
+      }
+    )
   }
   
   try{
@@ -50,17 +55,7 @@ client.on('message', (message) => {
       command.execute(message, match.slice(1)).catch(errorHandler);
     }
   }catch(err){
-    console.log(err);
-    let msg;
-    try{
-      msg = err.message;
-    }
-    catch(_){
-      msg = err;
-    }
-    message.reply(msg||'ada error, coba lagi aja');
-    client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(log);
-    client.channels.cache.get(process.env.DEV_CHANNEL_ID).send(msg);
+    errorHandler(err);
   }
 });
 

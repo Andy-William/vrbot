@@ -12,12 +12,12 @@ module.exports = {
     
     if( args[0].toLowerCase() === 'on' ){
       reminder.set(message.channel.id, true);
-      message.channel.send('Reminder turned on for this channel.')
+      return message.channel.send('Reminder turned on for this channel.')
     }
     else if( args[0].toLowerCase() === 'off' ){
       reminder.set(message.channel.id, false);
-      message.channel.send('Reminder turned off for this channel.')
+      return message.channel.send('Reminder turned off for this channel.')
     }
-    else usage(message);
+    else return usage(message);
 	},
 };
