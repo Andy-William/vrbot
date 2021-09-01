@@ -13,7 +13,7 @@ module.exports = {
 	name: 'refine',
 	description: 'Refine Simulator',
 	async execute(message, args) {
-    message.react('🆗');
+    await message.react('🆗');
     if( !args[0] ) return message.reply('Usage: `refine <space> start <space> target (<space> safe)`\nExample: `refine 0 10`')
     const startLevel = parseInt(args[0])
     const finishLevel = parseInt(args[1])
@@ -66,7 +66,8 @@ module.exports = {
       dataPoint.push(refine)
     }
     
-    const width = 20 + dataPoint.length*5;
+    let width = 30 + dataPoint.length*5
+    if( width > 2000 ) width = 2000
     const height = 300;
     const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
     const gridColor = new Array(16).fill('rgba(255,255,255,0.2)')
@@ -112,7 +113,7 @@ module.exports = {
     
  
     const embed = new Discord.MessageEmbed()
-      .setTitle(`Refine simulator from +${startLevel} to +${finishLevel}`)
+      .setTitle(`Refine simulator from +${startLevel} to +${finishLevel}${safe?' (safe)':''}`)
       .setDescription(`Completed after **${totalSuccess+totalFail}x** refine!`)
       .addFields(
         { 
