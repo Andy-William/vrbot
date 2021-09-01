@@ -9,10 +9,11 @@ const helpMessage = `Commands Help ❓
 !smvp ➜ SMVP for this week
 !vr ➜ Valhalla Ruins bosses
 
-!nolan ➜ Combined Fate Simulator
+!nolan ➜ Combined Fate simulator
 !poring !kp ➜ Card reroll simulator
 !extract !re ➜ Oracle mirror simulator
-!feast ➜ Feast Gacha Simulator
+!feast ➜ Feast Gacha simulator
+!refine ➜ Refining simulator
 
 !reminder ➜ Event reminder
 
