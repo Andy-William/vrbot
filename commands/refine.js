@@ -13,6 +13,7 @@ module.exports = {
 	name: 'refine',
 	description: 'Refine Simulator',
 	async execute(message, args) {
+    message.react('🆗');
     if( !args[0] ) return message.reply('Usage: `refine <space> start <space> target (<space> safe)`\nExample: `refine 0 10`')
     const startLevel = parseInt(args[0])
     const finishLevel = parseInt(args[1])
@@ -128,7 +129,7 @@ module.exports = {
           inline: true
         },{
           name: `Total Cost`, 
-          value: `Zeny: ${totalZeny.toLocaleString()}z\nStone: ${totalStone}\nEquip: ${totalItem}`
+          value: `Zeny: ${totalZeny.toLocaleString()} <:Zeny:882599892659355659>\nStone: ${totalStone} <:Oridecon:882599129811923004> <:Elunium:882599422318497874> <:Mithril:882599130835329084>\nEquip: ${totalItem} <:SkyfireShardSharp:882599129883234334>`
         }
       )
       .attachFiles([new Discord.MessageAttachment(image, 'refine.png')])
