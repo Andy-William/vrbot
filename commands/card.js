@@ -74,7 +74,7 @@ module.exports = {
           str += `${card.color}${(card.price).toLocaleString()} - ${card.name}\n`
         })
       }
-      str += 'Use \'card <space> color\' to get cards from specific color'
+      str += 'Use \'card <space> color\' to get cards from specific color\nAvailable colors: white, green, blue, purple, mini, mvp, craft'
     }
     else{
       console.log('querying data...');

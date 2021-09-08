@@ -22,13 +22,13 @@ module.exports = {
     if( !(finishLevel >= 0 && finishLevel <= 15) ) return message.reply('Invalid level. Should be from 0-15')
     if( startLevel > finishLevel ) return message.reply('Target level must be higher than start level')
 
-    refine = startLevel
-    totalItem = 0
-    totalZeny = 0
-    totalStone = 0
-    totalSuccess = 0
-    totalFail = 0
-    totalBroken = 0
+    let refine = startLevel
+    let totalItem = 0
+    let totalZeny = 0
+    let totalStone = 0
+    let totalSuccess = 0
+    let totalFail = 0
+    let totalBroken = 0
     
     let dataPoint = [startLevel]
     let dataColor = ["white"]
@@ -65,9 +65,10 @@ module.exports = {
       }
       dataPoint.push(refine)
     }
-    
-    let width = 30 + dataPoint.length*5
-    if( width > 2000 ) width = 2000
+    console.log('simul done')
+
+    let width = 40 + dataPoint.length*5
+    if( width > 1024 ) width = 1024
     const height = 300;
     const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
     const gridColor = new Array(16).fill('rgba(255,255,255,0.2)')
@@ -90,6 +91,7 @@ module.exports = {
         plugins: {
           legend: {display: false}
         },
+        showLine: false,
         scales: {
           y: {
             min:0,
@@ -110,8 +112,8 @@ module.exports = {
       }
     };
     const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+    console.log('drawing done')
     
- 
     const embed = new Discord.MessageEmbed()
       .setTitle(`Refine simulator from +${startLevel} to +${finishLevel}${safe?' (safe)':''}`)
       .setDescription(`Completed after **${totalSuccess+totalFail}x** refine!`)
