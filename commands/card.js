@@ -1,8 +1,5 @@
 const db = require('./../lib/mongo.js');
-const fetch = require('node-fetch');
 const cache = require('./../lib/cache.js');
-
-const cardUrl = "https://poring.life/?&server=el&q=gramdust"
 
 const colorMap = {
   'white': '⬜',
@@ -15,19 +12,6 @@ const gramMap = {
   'green': 20,
   'blue': 50,
   'purple': 100
-}
-
-// convert format
-function dbUpdateData(card){
-  return {
-    query: {name: card.name},
-    data: {
-      price: card.price,
-      lastRequest: card.lastRequest,
-      volume: card.volume == 'Sold Out' ? 0 : card.volume,
-      snapping: -1
-    }
-  }
 }
 
 module.exports = {
