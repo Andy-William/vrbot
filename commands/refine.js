@@ -67,7 +67,7 @@ module.exports = {
     }
     console.log('simul done')
 
-    let width = 40 + dataPoint.length*5
+    let width = 35 + dataPoint.length*5
     if( width > 1024 ) width = 1024
     const height = 300;
     const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
