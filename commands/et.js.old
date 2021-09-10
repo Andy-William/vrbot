@@ -7,37 +7,53 @@ const assets = require('./../lib/assets.js')
 const cache = require('./../lib/cache.js');
 const mvp = require('./../lib/mvp.js');
 const db = require('./../lib/mongo.js');
-const CSV = require('./../lib/csv.js');
 
-const mvpUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVmzI_pjGX_z58rf2lGWhGTCFhDwS2uJ9z27nCz5eF8zcuzigWkLB41qO0Em5XL34Y3_2JytP8ZZRu/pub?gid=776307001&single=true&output=csv'
+const mvpUrl = 'https://www.hdgames.net/boss.php'
+const miniUrl = 'https://www.hdgames.net/mini.php'
 const cacheDirectory = './tmp/'
 
-const mvpLv = [3,6,10,13,16,20,23,26,30,33,36,40,43,46,50,53,56,60,63,66,70,74,77,80,84,87,90,94,97,100]
+const mvpLv = Array.from(Array(30).keys()).map(i=>Math.floor((i+1)*3+(i+1)/3))
+const miniLv = [83,86,88,89,92,93,95,96,98,99]
 function getBosses(url){
   const cached = cache.get(url)
   if( cached ) return new Promise((resolve, reject)=>resolve(cached));
 
-  let res = {bosses: {}, updated: "", source: ""}
+  let res = {}
   console.log('fetching ' + url)
   return fetch(url).then(res => res.text()).then(data=>{
-    let table = CSV.CSVToArray(data);
-
-    let bosses = {};
-    for( let i=1 ; i<=30 ; i+=3 ){
-      const floor = table[i][0];
-      bosses[floor] = [];
-      for( let j=0 ; j<mvpLv.length ; j++ ){
-        bosses[floor][j] = [];
-        for( let k=0 ; k<3 ; k++ ){
-          const boss = table[i+k][j+1];
-          if( boss ) bosses[floor][j].push(boss);
+    res.bosses = {};
+    res.updated = (data.match(/class="cooking">.*?(\d+.*?)</)||[])[1];
+    res.source = url;
+    const rowRegex = /(CH|EN|PH|TH|ID) *(\d+)[\s<"'].*?<\/td>\s+<(.*?)<\/tr>/gs;
+    let channelData;
+    while( channelData = rowRegex.exec(data) ){
+      const channelId = channelData[1] + channelData[2];
+      res.bosses[channelId] = [];
+      const channelBosses = channelData[3].split('<td');
+      channelBosses.forEach(floorData=>{
+        const cellRegex = /src="[^"]*\/(.*?)\.png/gs;
+        let boss, floorBoss = [];
+        while( boss = cellRegex.exec(floorData) ){
+          if( boss[1] == 'hatii' ) boss[1] = 'garm'; // pepega
+          if( boss[1] == 'piper' ) boss[1] = 'flute_player'; // pepega
+          if( boss[1] == 'gazeti' ) boss[1] = 'ice_statue'; // pepega
+          if( boss[1] == 'golden_bug' ) boss[1] = 'golden_thief_bug';
+          if( boss[1] == 'lady_tanee' ) boss[1] = 'miss_tahnee';
+          if( boss[1] == 'goblin_king' ) boss[1] = 'goblin_leader';
+          if( boss[1] == 'moonlight' ) boss[1] = 'moonlight_flower';
+          if( boss[1] == 'detale' ) boss[1] = 'detarderous';
+          if( boss[1] == 'cecil_damon' ) boss[1] = 'dark_sniper_devine';
+          if( boss[1] == 'boitata' ) boss[1] = 'poi_tata';
+          if( boss[1] == 'kathryne_keyron' ) boss[1] = 'dark_high_wizard_katerina';
+          if( boss[1] == 'hill_wind_captain' ) boss[1] = 'hill_wind';
+          if( boss[1] == 'eremes_guile' ) boss[1] = 'dark_assassin_cross_eremes';
+          if( boss[1] == 'serpent_demon_gorgon' ) boss[1] = 'snake_gorgons';
+          if( boss[1] == 'lord-of-the-dead' ) boss[1] = 'lord_of_death';
+          floorBoss.push(boss[1].toLowerCase());
         }
-      }
+        res.bosses[channelId].push(floorBoss)
+      })
     }
-    res.bosses = bosses;
-    res.updated = table[31][1];
-    res.source = table[31][2];
-
     cache.set(url, res, 300);
     return res;
   }).catch((e)=>{console.log(e); return {}});
@@ -49,7 +65,7 @@ async function drawImage(data, type, message){
   try{
     if( message.content.match(/--nocache/i) ) throw 'no cache'
     const picture = fs.readFileSync(cacheDirectory + hash);
-    return [Buffer.from(picture), data.updated, data.source];
+    return [Buffer.from(picture), data.updated];
   } catch (e) {
     console.log('redrawing ' + type);
     if( type == 'mvp' ) message.react('🎨');
@@ -93,7 +109,7 @@ async function drawImage(data, type, message){
     ctx.lineTo(offset, canvas.height-footerSize);
     ctx.stroke();
     const columnLength = (entries[0][1][i].length*imageSize)+2*horizontalBuffer;
-    ctx.fillText(mvpLv[i]+'F', offset+columnLength/2, titleSize+headerSize/2);
+    ctx.fillText((type=='mvp'?mvpLv[i]:miniLv[i])+'F', offset+columnLength/2, titleSize+headerSize/2);
     offset += columnLength;
   }
 
@@ -112,7 +128,7 @@ async function drawImage(data, type, message){
       offset += horizontalBuffer;
       for( let k=0 ; k<bosses.length ; k++ ){
         ctx.drawImage(
-          await assets.getCanvas(bosses[k]),
+          await assets.getCanvas(bosses[k]=='loading'?'question_mark':bosses[k]),
           offset,
           titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize),
           imageSize,
@@ -134,8 +150,7 @@ async function drawImage(data, type, message){
 
   const buf = canvas.toBuffer();
   fs.writeFile(cacheDirectory + hash, buf, (err)=>{if(err)console.log(err)});
-
-  return [buf, data.updated, data.source];
+  return [buf, data.updated];
 }
 
 async function getMvp(message, range){
@@ -158,6 +173,12 @@ async function getMvp(message, range){
   return drawImage(data, 'mvp', message).then((res)=>[...res, values]);
 }
 
+function getMini(message){
+  return getBosses(miniUrl).then(data=>{
+    return drawImage(data, 'mini', message);
+  })
+}
+
 module.exports = {
 	name: 'et',
   alias: '^ett+$',
@@ -174,11 +195,12 @@ module.exports = {
     if( args ){
       range = [parseInt(args[0])||1, parseInt(args[1]||100)]
     }
-    getMvp(message, range).then(([image, updated, source, values])=>{
+    getMvp(message, range).then(([image, updated, values])=>{
+      console.log(values);
       const embed = new Discord.MessageEmbed()
         .setTitle('ET MVP List')
         .setDescription('Updated ' + updated)
-        .setURL(source)
+        .setURL(mvpUrl)
         .addFields(
           { 
             name: 'Suggested Channels from floor ' + range[0] + ' to ' + range[1] + ' (with score)',
@@ -190,7 +212,20 @@ module.exports = {
       message.channel.send(embed)
     }).catch((err)=>{
       console.log(err);
-      return message.channel.send('Failed to send picture');
+      return message.channel.send('Failed to send picture, try checking ' + mvpUrl );
     });
+    
+    // getMini(message).then(([image, updated])=>{
+    //   const embed = new Discord.MessageEmbed()
+    //     .setTitle('ET Mini List')
+    //     .setDescription('Updated ' + updated)
+    //     .setURL(miniUrl)
+    //     .attachFiles([new Discord.MessageAttachment(image, 'mini.png')])
+    //     .setImage('attachment://mini.png')
+    //   message.channel.send(embed)
+    // }).catch((err)=>{
+    //   console.log(err);
+    //   return message.channel.send('Gagal mengirim gambar, coba cek di ' + miniUrl );
+    // });
 	},
 };  
