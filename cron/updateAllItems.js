@@ -44,8 +44,13 @@ module.exports = {
     let cardUpdates = []
     let petUpdates = []
     let itemUpdates = []
+
+    let all = new Set()
   
     data.forEach(d=>{
+      if( d.id == 700142 ) return; // fake ice cube
+      if( all.has(d.name) ) console.log('duplicate: ' + d.name);
+      else all.add(d.name);
       switch(d.category){
         case 'card':
           cardUpdates.push(dbUpdateCard(d));
@@ -81,10 +86,7 @@ module.exports = {
     console.log(cardUpdates.length, petUpdates.length, itemUpdates.length)
 
     await db.bulkUpdate('cards', cardUpdates, false);
-    console.log('aaa')
     await db.bulkUpdate('pets', petUpdates, false);
-    console.log('bbb')
     await db.bulkUpdate('items', itemUpdates, false);
-    console.log('ccc')
 	},
 };

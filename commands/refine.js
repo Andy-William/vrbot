@@ -132,7 +132,7 @@ module.exports = {
           inline: true
         },{
           name: `Total Cost`, 
-          value: `Zeny: ${totalZeny.toLocaleString()} <:Zeny:882599892659355659>\nStone: ${totalStone} <:Oridecon:882599129811923004> <:Elunium:882599422318497874> <:Mithril:882599130835329084>\nEquip: ${totalItem} <:SkyfireShardSharp:882599129883234334>`
+          value: `Zeny: ${totalZeny.toLocaleString()} <:Zeny:882599892659355659>\nStone: ${totalStone} <:Oridecon:882599129811923004> <:Elunium:882599422318497874> <:Mithril:882599130835329084>\nEquip: ${totalItem} <:SkyfireShardSharp:882599129883234334> <:HearthAsh:886264220029689886> <:ExquisiteRepairingShard:886279421894463518>`
         }
       )
       .attachFiles([new Discord.MessageAttachment(image, 'refine.png')])
