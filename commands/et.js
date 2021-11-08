@@ -9,7 +9,9 @@ const mvp = require('./../lib/mvp.js');
 const db = require('./../lib/mongo.js');
 const CSV = require('./../lib/csv.js');
 
-const mvpUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTVmzI_pjGX_z58rf2lGWhGTCFhDwS2uJ9z27nCz5eF8zcuzigWkLB41qO0Em5XL34Y3_2JytP8ZZRu/pub?gid=776307001&single=true&output=csv'
+Canvas.registerFont('./assets/fonts/MochiyPopPOne-Regular.ttf', {family: "Mochiy Pop P One"})
+
+const mvpUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaCPGUYKYyrbJkLpkYq4KHUxWt8iptJzjLCCZ22wyVGc2yiKv2dXl8TghvDRcfLirTlJ_wL3rXcWCX/pub?gid=1364391805&single=true&output=csv'
 const cacheDirectory = './tmp/'
 
 const mvpLv = [3,6,10,13,16,20,23,26,30,33,36,40,43,46,50,53,56,60,63,66,70,74,77,80,84,87,90,94,97,100]
@@ -38,7 +40,7 @@ function getBosses(url){
     res.updated = table[31][1];
     res.source = table[31][2];
 
-    cache.set(url, res, 300);
+    cache.set(url, res, 60);
     return res;
   }).catch((e)=>{console.log(e); return {}});
 }
@@ -72,7 +74,7 @@ async function drawImage(data, type, message){
   );
   const ctx = canvas.getContext('2d');
 
-  ctx.font = 'bold 40px calibri';
+  ctx.font = 'bold 40px Mochiy Pop P One';
   ctx.fillStyle = '#F0F8FF';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -99,7 +101,7 @@ async function drawImage(data, type, message){
 
   for( let i=0 ; i< entries.length ; i++ ){
     const [channel, floor] = entries[i];
-    ctx.fillText(channel, channelSize/2, titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize) + imageSize/2  )
+    ctx.fillText('CH'+channel%10, channelSize/2, titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize) + imageSize/2  )
     
     ctx.beginPath();
     ctx.moveTo(0, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize));
@@ -124,7 +126,7 @@ async function drawImage(data, type, message){
     }
   }
   
-  ctx.font = '16px roboto';
+  ctx.font = '14px Mochiy Pop P One';
   ctx.textBaseline = 'bottom';
   ctx.textAlign = 'left';
   ctx.fillText('Updated ' + data.updated, 0, canvas.height);
@@ -153,7 +155,7 @@ async function getMvp(message, range){
         }
       }
     }
-    values.push([sum, floor]);
+    values.push([sum, floor%10]);
   }
   return drawImage(data, 'mvp', message).then((res)=>[...res, values]);
 }
@@ -178,7 +180,7 @@ module.exports = {
       const embed = new Discord.MessageEmbed()
         .setTitle('ET MVP List')
         .setDescription('Updated ' + updated)
-        .setURL(source)
+        // .setURL(source)
         .addFields(
           { 
             name: 'Suggested Channels from floor ' + range[0] + ' to ' + range[1] + ' (with score)',
