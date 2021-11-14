@@ -66,23 +66,36 @@ async function drawImage(data, type, message){
   const horizontalBuffer = 8;  // jarak dari gambar ke garis batas kolom
   const verticalBuffer = 8;  // jarak dari gambar ke garis batas row
   const imageSize = 45;  // ukuran gambar
-  const footerSize = 25; // footer
+  const footerSize = 35; // footer
+  const imgBgColor = "#222222";
+  const tenBgColor = "#444444"; // 10 floor boss bgcolor
+  const lineWidth = 3;
+  const lineColor = '#0091EA';
+  const fontColor = '#F0F8FF';
+  const tenFontColor = '#e69199'; // 10 floor boss floor font color
 
   const canvas = Canvas.createCanvas(
-    channelSize + entries[0][1].length*horizontalBuffer*2 + entries[0][1].flat().length*imageSize,
-    entries.length*(imageSize+verticalBuffer*2) + titleSize + headerSize + footerSize
+    channelSize + entries[0][1].length*horizontalBuffer*2 + entries[0][1].length*imageSize,
+    entries.length*(imageSize*3+verticalBuffer*2) + titleSize + headerSize + footerSize
   );
   const ctx = canvas.getContext('2d');
+  ctx.fillStyle = imgBgColor
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.font = 'bold 40px Mochiy Pop P One';
-  ctx.fillStyle = '#F0F8FF';
+  ctx.fillStyle = fontColor;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   ctx.fillText('Endless Tower', canvas.width/2, titleSize/2);
 
+  ctx.font = '1px Mochiy Pop P One'
+  const maxSize = channelSize / ctx.measureText(data.source).width; // max font size for small A1 cell
+  ctx.font = `${maxSize}px Mochiy Pop P One`
+  ctx.fillText(data.source, channelSize/2, titleSize + headerSize/2);
+
   ctx.beginPath();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = '#0091EA';
+  ctx.lineWidth = lineWidth;
+  ctx.strokeStyle = lineColor;
   ctx.moveTo(0, titleSize+headerSize);
   ctx.lineTo(canvas.width, titleSize+headerSize);
   ctx.stroke();
@@ -93,46 +106,78 @@ async function drawImage(data, type, message){
     ctx.beginPath();
     ctx.moveTo(offset, titleSize);
     ctx.lineTo(offset, canvas.height-footerSize);
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = lineColor;
     ctx.stroke();
-    const columnLength = (entries[0][1][i].length*imageSize)+2*horizontalBuffer;
+    const columnLength = (imageSize)+2*horizontalBuffer;
+
+    if( mvpLv[i]%10==0 ){
+      ctx.fillStyle = tenBgColor
+      ctx.fillRect(
+        offset + lineWidth/2,
+        titleSize + lineWidth/2,
+        columnLength - lineWidth,
+        headerSize - lineWidth
+      )
+      ctx.fillStyle = tenFontColor;
+    }
+    else ctx.fillStyle = fontColor;
     ctx.fillText(mvpLv[i]+'F', offset+columnLength/2, titleSize+headerSize/2);
     offset += columnLength;
   }
 
   for( let i=0 ; i< entries.length ; i++ ){
     const [channel, floor] = entries[i];
-    ctx.fillText('CH'+channel%10, channelSize/2, titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize) + imageSize/2  )
+    ctx.fillStyle = fontColor;
+    ctx.fillText('CH'+channel%10, channelSize/2, titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize*3) + imageSize*3/2  )
     
     ctx.beginPath();
-    ctx.moveTo(0, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize));
-    ctx.lineTo(canvas.width, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize));
+    ctx.moveTo(0, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize*3));
+    ctx.lineTo(canvas.width, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize*3));
     ctx.stroke();
     
     let offset = channelSize;
     for( let j=0 ; j<floor.length ; j++ ){
+      if( mvpLv[j]%10==0 ){
+        ctx.fillStyle = tenBgColor
+        ctx.fillRect(
+          offset + lineWidth/2,
+          titleSize + headerSize + i*(verticalBuffer*2+imageSize*3) + lineWidth/2,
+          imageSize + horizontalBuffer*2 - lineWidth,
+          verticalBuffer*2+imageSize*3 - lineWidth
+        )
+      }
       const bosses = floor[j];
       offset += horizontalBuffer;
       for( let k=0 ; k<bosses.length ; k++ ){
+        let extrabuf = (3-bosses.length)*imageSize/2;
         ctx.drawImage(
           await assets.getCanvas(bosses[k]),
           offset,
-          titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize),
+          titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize*3)+k*imageSize+extrabuf,
           imageSize,
           imageSize
         );
-        offset += imageSize;
       }
-      offset += horizontalBuffer;
+      offset += imageSize + horizontalBuffer;
     }
   }
   
-  ctx.font = '14px Mochiy Pop P One';
+  ctx.font = '24px Mochiy Pop P One';
   ctx.textBaseline = 'bottom';
   ctx.textAlign = 'left';
+  ctx.fillStyle = fontColor;
   ctx.fillText('Updated ' + data.updated, 0, canvas.height);
   
   ctx.textAlign = 'right';
   ctx.fillText('Source: ' + data.source, canvas.width, canvas.height);
+
+  ctx.font = '70px Mochiy Pop P One';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = fontColor;
+  ctx.globalAlpha = 0.2
+  ctx.fillText(data.source, canvas.width/10, canvas.height/2.18);
+  ctx.fillText(data.source, canvas.width/10, canvas.height/1.35);
 
   const buf = canvas.toBuffer();
   fs.writeFile(cacheDirectory + hash, buf, (err)=>{if(err)console.log(err)});

@@ -47,7 +47,7 @@ function getBosses(url){
 
 async function drawImage(data, type, message){
   // check if picture already cached
-  const hash = md5(JSON.stringify(data)) + 'vert.png';
+  const hash = md5(JSON.stringify(data)) + '-light.png';
   try{
     if( message.content.match(/--nocache/i) ) throw 'no cache'
     const picture = fs.readFileSync(cacheDirectory + hash);
@@ -68,17 +68,11 @@ async function drawImage(data, type, message){
   const imageSize = 45;  // ukuran gambar
   const footerSize = 35; // footer
   const imgBgColor = "#FFFFFF";
-  // const imgBgColor = "#323232";
-  // const tenBgColor = "#630a22"; // 10 floor boss bgcolor
-  // const tenBgColor = "#484848"; // 10 floor boss bgcolor
   const tenBgColor = "#FFCCCC"; // 10 floor boss bgcolor
   const altBgColor = "#CCCCCC"; // zebra color per row
   const lineWidth = 3;
-  // const lineColor = '#0091EA';
   const lineColor = '#444444';
-  // const fontColor = '#F0F8FF';
   const fontColor = '#000000';
-  // const tenFontColor = '#e69199'; // 10 floor boss floor font color
   const tenFontColor = '#FF0000'; // 10 floor boss floor font color
 
   const canvas = Canvas.createCanvas(
@@ -99,8 +93,7 @@ async function drawImage(data, type, message){
   const maxSize = channelSize / ctx.measureText(data.source).width; // max font size for small A1 cell
   ctx.font = `${maxSize}px Mochiy Pop P One`
   ctx.fillText(data.source, channelSize/2, titleSize + headerSize/2);
-  
-  ctx.fillText
+
   ctx.beginPath();
   ctx.lineWidth = lineWidth;
   ctx.strokeStyle = lineColor;
@@ -162,7 +155,7 @@ async function drawImage(data, type, message){
     
     let offset = channelSize;
     for( let j=0 ; j<floor.length ; j++ ){
-      if( mvpLv[j]%10==0 ){
+      if( mvpLv[j]%10==0 ){ // ten floor color
         ctx.fillStyle = tenBgColor
         ctx.fillRect(
           offset + lineWidth/2,
@@ -192,8 +185,7 @@ async function drawImage(data, type, message){
           imageSize
         );
       }
-      offset += imageSize;
-      offset += horizontalBuffer;
+      offset += imageSize + horizontalBuffer;
     }
   }
   
@@ -205,7 +197,6 @@ async function drawImage(data, type, message){
   
   ctx.textAlign = 'right';
   ctx.fillText('Source: ' + data.source, canvas.width, canvas.height);
-
 
   ctx.font = '70px Mochiy Pop P One';
   ctx.textAlign = 'left';
