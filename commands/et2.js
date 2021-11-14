@@ -67,12 +67,19 @@ async function drawImage(data, type, message){
   const verticalBuffer = 8;  // jarak dari gambar ke garis batas row
   const imageSize = 45;  // ukuran gambar
   const footerSize = 35; // footer
-  const imgBgColor = "#323232";
+  const imgBgColor = "#FFFFFF";
+  // const imgBgColor = "#323232";
   // const tenBgColor = "#630a22"; // 10 floor boss bgcolor
-  const tenBgColor = "#484848"; // 10 floor boss bgcolor
+  // const tenBgColor = "#484848"; // 10 floor boss bgcolor
+  const tenBgColor = "#FFCCCC"; // 10 floor boss bgcolor
+  const altBgColor = "#CCCCCC"; // zebra color per row
   const lineWidth = 3;
-  const fontColor = '#F0F8FF';
-  const tenFontColor = '#e69199'; // 10 floor boss floor font color
+  // const lineColor = '#0091EA';
+  const lineColor = '#444444';
+  // const fontColor = '#F0F8FF';
+  const fontColor = '#000000';
+  // const tenFontColor = '#e69199'; // 10 floor boss floor font color
+  const tenFontColor = '#FF0000'; // 10 floor boss floor font color
 
   const canvas = Canvas.createCanvas(
     channelSize + entries[0][1].length*horizontalBuffer*2 + entries[0][1].length*imageSize,
@@ -88,9 +95,22 @@ async function drawImage(data, type, message){
   ctx.textBaseline = 'middle';
   ctx.fillText('Endless Tower', canvas.width/2, titleSize/2);
 
+  ctx.font = '1px Mochiy Pop P One'
+  const maxSize = channelSize / ctx.measureText(data.source).width; // max font size for small A1 cell
+  ctx.font = `${maxSize}px Mochiy Pop P One`
+  ctx.fillText(data.source, channelSize/2, titleSize + headerSize/2);
+  
+  ctx.fillText
   ctx.beginPath();
   ctx.lineWidth = lineWidth;
-  ctx.strokeStyle = '#0091EA';
+  ctx.strokeStyle = lineColor;
+  ctx.moveTo(0, titleSize);
+  ctx.lineTo(canvas.width, titleSize);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.lineWidth = lineWidth;
+  ctx.strokeStyle = lineColor;
   ctx.moveTo(0, titleSize+headerSize);
   ctx.lineTo(canvas.width, titleSize+headerSize);
   ctx.stroke();
@@ -101,10 +121,21 @@ async function drawImage(data, type, message){
     ctx.beginPath();
     ctx.moveTo(offset, titleSize);
     ctx.lineTo(offset, canvas.height-footerSize);
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = lineColor;
     ctx.stroke();
     const columnLength = (imageSize)+2*horizontalBuffer;
     
-    if( mvpLv[i]%10==0 ) ctx.fillStyle = tenFontColor;
+    if( mvpLv[i]%10==0 ){
+      ctx.fillStyle = tenBgColor
+      ctx.fillRect(
+        offset + lineWidth/2,
+        titleSize + lineWidth/2,
+        columnLength - lineWidth,
+        headerSize - lineWidth
+      )
+      ctx.fillStyle = tenFontColor;
+    }
     else ctx.fillStyle = fontColor;
     ctx.fillText(mvpLv[i]+'F', offset+columnLength/2, titleSize+headerSize/2);
     offset += columnLength;
@@ -112,6 +143,15 @@ async function drawImage(data, type, message){
 
   for( let i=0 ; i< entries.length ; i++ ){
     const [channel, floor] = entries[i];
+    if( i%2==0 ){
+      ctx.fillStyle = altBgColor
+      ctx.fillRect(
+        0,
+        titleSize + headerSize + i*(verticalBuffer*2+imageSize*3) + lineWidth/2,
+        channelSize - lineWidth/2,
+        verticalBuffer*2+imageSize*3 - lineWidth
+      )
+    }
     ctx.fillStyle = fontColor;
     ctx.fillText('CH'+channel%10, channelSize/2, titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize*3) + imageSize*3/2  )
     
@@ -126,9 +166,18 @@ async function drawImage(data, type, message){
         ctx.fillStyle = tenBgColor
         ctx.fillRect(
           offset + lineWidth/2,
-          titleSize + headerSize + i*(verticalBuffer*2+imageSize*3) + lineWidth,
+          titleSize + headerSize + i*(verticalBuffer*2+imageSize*3) + lineWidth/2,
           imageSize + horizontalBuffer*2 - lineWidth,
-          verticalBuffer*2+imageSize*3 - lineWidth*2
+          verticalBuffer*2+imageSize*3 - lineWidth
+        )
+      }
+      else if( i%2==0 ){
+        ctx.fillStyle = altBgColor
+        ctx.fillRect(
+          offset + lineWidth/2,
+          titleSize + headerSize + i*(verticalBuffer*2+imageSize*3) + lineWidth/2,
+          imageSize + horizontalBuffer*2 - lineWidth,
+          verticalBuffer*2+imageSize*3 - lineWidth
         )
       }
       const bosses = floor[j];
