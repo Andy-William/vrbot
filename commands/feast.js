@@ -62,6 +62,6 @@ module.exports = {
     let str = "<:feast:780014200038359040> Feast Gacha Simulator <:feast:780014200038359040>\n";
     str += `${message.author.toString()} got **${result}**${typeResult.match(/^New/)?` (${typeResult})`:''}\n`;
 
-    await message.channel.send(str).catch((err)=>console.log(err));
+    return message.channel.send(str)
 	},
 };

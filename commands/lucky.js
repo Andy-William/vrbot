@@ -27,7 +27,7 @@ module.exports = {
 
     let msgs = str.match(/.{1,1998}(\n|$)/gs); // split message every 2000 chars
     for( let i=0 ; i<msgs.length ; i++ ){
-      await message.channel.send(msgs[i]).catch((err)=>console.log(err))
+      await message.channel.send(msgs[i])
     }
   }
 };

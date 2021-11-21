@@ -22,7 +22,7 @@ module.exports = {
     } else {
       let msgs = ('MVP list (best to worst)\n'+(await mvp.getRanking()).map((v,idx)=>`${idx+1}. ${v[1]}`).join('\n')).match(/.{1,1988}(\n|$)/gs); // split message every 2000 chars
       for( let i=0 ; i<msgs.length ; i++ ){
-        await message.channel.send("```json\n"+msgs[i]+"```").catch((err)=>console.log(err));
+        await message.channel.send("```json\n"+msgs[i]+"```")
       }
     }
   }

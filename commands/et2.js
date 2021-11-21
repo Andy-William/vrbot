@@ -40,7 +40,7 @@ function getBosses(url){
     res.updated = table[31][1];
     res.source = table[31][2];
 
-    cache.set(url, res, 60);
+    cache.set(url, res, 5);
     return res;
   }).catch((e)=>{console.log(e); return {}});
 }
@@ -246,7 +246,7 @@ module.exports = {
     if( args ){
       range = [parseInt(args[0])||1, parseInt(args[1]||100)]
     }
-    getMvp(message, range).then(([image, updated, source, values])=>{
+    return getMvp(message, range).then(([image, updated, source, values])=>{
       const embed = new Discord.MessageEmbed()
         .setTitle('ET MVP List')
         .setDescription('Updated ' + updated)
@@ -259,7 +259,7 @@ module.exports = {
         )
         .attachFiles([new Discord.MessageAttachment(image, 'mvp.png')])
         .setImage('attachment://mvp.png')
-      message.channel.send(embed)
+      return message.channel.send(embed)
     }).catch((err)=>{
       console.log(err);
       return message.channel.send('Failed to send picture');

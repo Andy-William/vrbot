@@ -29,6 +29,6 @@ module.exports = {
 	name: 'help',
 	description: 'List command',
 	async execute(message, args) {
-    message.reply(helpMessage)
+    return message.reply(helpMessage)
 	},
 };

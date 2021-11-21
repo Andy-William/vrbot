@@ -48,6 +48,6 @@ module.exports = {
     Object.entries(smvpList).forEach(([location, smvps]) => {
       str += location + ": **" + smvps[weekNum % smvps.length] + "**\n";
     });
-    message.channel.send(str);
+    return message.channel.send(str);
   }
 };

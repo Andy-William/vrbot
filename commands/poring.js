@@ -37,6 +37,6 @@ module.exports = {
     let str = "🃏 King Poring Card Reproduction Simulator 🃏\n";
     str += `${message.author.toString()} got **${card.name}** - priced ${(card.price||0).toLocaleString()}\n`;
 
-    await message.channel.send(str).catch((err)=>console.log(err));
+    return await message.channel.send(str)
 	},
 };

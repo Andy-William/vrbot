@@ -137,7 +137,7 @@ module.exports = {
       )
       .attachFiles([new Discord.MessageAttachment(image, 'refine.png')])
       .setImage('attachment://refine.png')
-    await message.channel.send(embed)
+    return message.channel.send(embed);
 	},
 }
   
