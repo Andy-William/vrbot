@@ -49,10 +49,9 @@ client.on('message', (message) => {
     }
     else{
       // try listener commands
-      let match;
-      const command = client.commands.find(cmd => cmd.listener && (match = message.content.match(cmd.listener)));
+      const command = client.commands.find(cmd => cmd.listener && message.content.match(cmd.listener));
       if( !command ) return;
-      command.execute(message, match.slice(1)).catch(errorHandler);
+      command.execute(message, message.content).catch(errorHandler);
     }
   }catch(err){
     errorHandler(err);
