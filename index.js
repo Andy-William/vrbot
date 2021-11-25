@@ -36,6 +36,14 @@ client.on('message', (message) => {
       }
       return;
     }
+    else if( message.channel.id == process.env.RUMAHAN_CHANNEL_ID && !message.author.bot ){
+      const attachment =  message.attachments.first()
+      if( attachment && attachment.url.match(/\.(jpg|png)$/) ){
+        console.log(attachment.url)
+        console.log(message.guild.bannerURL())
+        message.guild.setBanner(attachment.url).then(res=>{console.log('banner changed')}).catch(err=>console.log(err));
+      }
+    }
 
     if ( message.content.startsWith(prefix) ){
       const args = message.content.slice(1).split(/ +/); // split arguments
