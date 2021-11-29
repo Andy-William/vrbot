@@ -26,7 +26,7 @@ client.on('message', (message) => {
   
   try{
     console.log(log)
-    if( message.author.bot ) return;
+    if( message.author.bot && message.channel.id != process.env.CAKE_CHANNEL_ID ) return;
     
     // pamernoko
     if( message.channel.id == process.env.PAMERNOKO_CHANNEL_ID ){
