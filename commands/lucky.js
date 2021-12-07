@@ -18,7 +18,7 @@ module.exports = {
     
     if( limit > items.length ) limit = items.length;
 
-    let str = "Lucky Shop Item Values (WIP)\n";
+    let str = "Lucky Shop Item Values\n";
     let maxLength = Math.round(items[0].value).toLocaleString().length;
 
     for( let i=0 ; i<limit ; i++ ){
