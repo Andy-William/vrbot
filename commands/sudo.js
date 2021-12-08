@@ -112,8 +112,7 @@ module.exports = {
     else if( message.channel.id == process.env.CAKE_CHANNEL_ID ){
       if( message.content.match(/^[^\w]*cake/i) ){ // capture weekly cake
         const attachment =  message.attachments.first()
-      console.log(attachment)
-        if( attachment.url ){
+        if( attachment && attachment.url ){
           const data = {
             url: attachment.url,
             created_at: reset.nextReset()-1
