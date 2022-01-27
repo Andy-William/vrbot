@@ -52,6 +52,7 @@ module.exports = {
       return await message.channel.send(str).catch((err)=>console.log(err));
     }
 
+    await message.react('🆗');
     let current = 0;
     let rolls = 0;
 
