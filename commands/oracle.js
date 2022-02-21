@@ -21,6 +21,7 @@ module.exports = {
       image = dbImage.url;
     }
     else{
+      return message.channel.send('not yet');
       const imgUrl = cache.get(oracleUrl) || await fetch(oracleUrl)
         .then(res => res.text()).then(data=>{
           const regex = /img src\s*=\s*"(?!asset)(.*)"/;
