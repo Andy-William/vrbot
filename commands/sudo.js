@@ -10,7 +10,7 @@ function getBase64Image(url){
 }
 module.exports = {
 	name: 'sudo',
-  listener: /^[^\w]*cake/i,
+  listener: /^[^\w]*cake|^$/i,
 	description: 'Admin Stuff',
 	async execute(message, args) {
     if( message.channel.id == process.env.DEV_CHANNEL_ID ){
@@ -110,8 +110,8 @@ module.exports = {
       }
     }
     else if( message.channel.id == process.env.CAKE_CHANNEL_ID ){
+      const attachment =  message.attachments.first()
       if( message.content.match(/^[^\w]*cake/i) ){ // capture weekly cake
-        const attachment =  message.attachments.first()
         if( attachment && attachment.url ){
           const data = {
             url: attachment.url,
@@ -122,6 +122,16 @@ module.exports = {
           })
           return message.channel.send(`Cake set to <${data.url}>`);
         }
+      }
+      else if( attachment && attachment.url.match(/oracle/i) ){
+        const data = {
+          url: attachment.url,
+          created_at: reset.nextReset()-1
+        }
+        db.update('oracle', {}, data, {upsert: true}).then(()=>{
+          message.react('✅');
+        })
+        return message.channel.send(`Oracle set to <${data.url}>`);
       }
     }
 	},
