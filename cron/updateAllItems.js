@@ -40,6 +40,7 @@ module.exports = {
       console.log(e);
       return [];
     });
+    return;
 
     let cardUpdates = []
     let petUpdates = []
