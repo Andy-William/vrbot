@@ -3,7 +3,7 @@ const poring = require('./../lib/poring.js');
 
 function dbUpdateCard(card){
   return {
-    query: {name: card.name},
+    query: {name: card.name, $or: [{lastRequest: {$gt: card.lastRequest}, lastRequest: null}]},
     data: {
       price: card.price,
       lastRequest: card.lastRequest,
@@ -14,7 +14,7 @@ function dbUpdateCard(card){
 
 function dbUpdatePet(item){
   return {
-    query: {catch: item.name},
+    query: {catch: item.name, $or: [{lastRequest: {$gt: item.lastRequest}, lastRequest: null}]},
     data: {
       price: item.price,
       lastRequest: item.lastRequest
@@ -24,7 +24,7 @@ function dbUpdatePet(item){
 
 function dbUpdateItem(item){
   return {
-    query: {name: item.name},
+    query: {name: item.name, $or: [{lastRequest: {$gt: item.lastRequest}, lastRequest: null}]},
     data: {
       price: item.price,
       lastRequest: item.lastRequest

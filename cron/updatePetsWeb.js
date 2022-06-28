@@ -25,7 +25,7 @@ module.exports = {
         if( items.length == 0 ) console.log('failed', res[i].catch)
         items.forEach(item=>{
           item = dbUpdateData(item)
-          db.update('pets', item.query, item.data).then(res=>{
+          db.updateNewer('pets', item.query, item.data, item.data.lastRequest).then(res=>{
             if( res.matchedCount == 1 ) console.log('updated', item.query, res.modifiedCount)
             else console.log('failed', item.query)
           }).catch(e=>console.log(e));

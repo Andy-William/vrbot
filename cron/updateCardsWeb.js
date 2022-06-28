@@ -27,7 +27,7 @@ module.exports = {
         if( cards.length == 0 ) console.log('failed', res[i].name)
         cards.forEach(card=>{
           card = dbUpdateData(card)
-          db.update('cards', card.query, card.data).then(res=>{
+          db.updateNewer('cards', card.query, card.data, card.data.lastRequest).then(res=>{
             if( res.matchedCount == 1 ) console.log('updated', card.query, res.modifiedCount)
             else console.log('failed', card.query)
           }).catch(e=>console.log(e));
