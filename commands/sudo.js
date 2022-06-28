@@ -107,6 +107,16 @@ module.exports = {
             await message.channel.send("```json\n"+msgs[i]+"```").catch((err)=>console.log(err));
           }
           break;
+        case 'item':
+          if( !args[1] || args[1] == '' || parseInt(args[1])==NaN || !args[2] ) return message.reply('invalid params. format: `sudo item price name`');
+          const price = parseInt(args[1])
+          const name = args.slice(2).join(' ');
+          return await db.update('items', {name: name}, {price: price, lastRequest: Math.floor(new Date/1000)}).then((res)=>{
+            message.react('✅');
+            if( res.matchedCount == 0 ) return message.channel.send(`${name} not found`)
+            if( res.modifiedCount == 0 ) return message.channel.send(`${name} not changed`)
+            return message.channel.send(`${name} price set to ${price}`);
+          })
       }
     }
     else if( message.channel.id == process.env.CAKE_CHANNEL_ID ){
