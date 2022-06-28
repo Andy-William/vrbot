@@ -32,8 +32,8 @@ module.exports = {
             matched = true;
             item = dbUpdateData(item)
             db.updateNewer('items', item.query, item.data, item.data.lastRequest).then(res=>{
-              if( res.matchedCount == 1 ) console.log('updated', item.query, res.modifiedCount)
-              else console.log('failed', item.query)
+              if( res.matchedCount == 1 ) console.log('updated', JSON.stringify(item.query), res.modifiedCount)
+              else console.log('failed', JSON.stringify(item.query))
             }).catch(e=>console.log(e));
           }
         })

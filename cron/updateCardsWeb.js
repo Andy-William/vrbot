@@ -28,8 +28,8 @@ module.exports = {
         cards.forEach(card=>{
           card = dbUpdateData(card)
           db.updateNewer('cards', card.query, card.data, card.data.lastRequest).then(res=>{
-            if( res.matchedCount == 1 ) console.log('updated', card.query, res.modifiedCount)
-            else console.log('failed', card.query)
+            if( res.matchedCount == 1 ) console.log('updated', JSON.stringify(card.query), res.modifiedCount)
+            else console.log('failed', JSON.stringify(card.query))
           }).catch(e=>console.log(e));
         })
       }
