@@ -12,6 +12,7 @@ module.exports = {
 	name: 'sudo',
   listener: /^[^\w]*cake|^$/i,
 	description: 'Admin Stuff',
+  hidden: true,
 	async execute(message, args) {
     if( message.channel.id == process.env.DEV_CHANNEL_ID ){
       switch(args[0]){

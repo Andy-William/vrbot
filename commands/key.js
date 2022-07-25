@@ -3,6 +3,7 @@ const crypto = require('crypto')
 module.exports = {
 	name: 'key',
 	description: 'secret key',
+  hidden: true,
 	async execute(message, args) {
     try{
       if( message.guild ) return;

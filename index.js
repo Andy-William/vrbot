@@ -3,7 +3,7 @@ dotenv.config();
 const client = require('./lib/bot.js').client;
 
 const prefix = '!';
-client.on('message', (message) => {
+client.on('messageCreate', (message) => {
   let log = `${message.channel.id}-(${message.author.id}) ${message.author.username}: ${message.content}`
   if( message.guild ) log = `[${message.guild.id}-${message.guild.name}]` + log
   const errorHandler = function(err){
@@ -53,13 +53,7 @@ client.on('message', (message) => {
       const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.alias && (match = commandName.match(cmd.alias)));
       if( !command ) return;
       if( match ) args.unshift(...match.slice(1));
-      command.execute(message, args).catch(errorHandler);
-    }
-    else{
-      // try listener commands
-      const command = client.commands.find(cmd => cmd.listener && message.content.match(cmd.listener));
-      if( !command ) return;
-      command.execute(message, message.content).catch(errorHandler);
+      command.processMessage(message, args).catch(errorHandler);
     }
   }catch(err){
     errorHandler(err);
@@ -85,4 +79,5 @@ process.on('unhandledRejection', error => {
     client.channels.cache.get(process.env.DEV_CHANNEL_ID).send("error sesuatu cek log! <@273387024856383489>");
 });
 
+require('./event_handler.js');
 require('./web.js');

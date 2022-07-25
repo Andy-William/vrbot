@@ -234,6 +234,7 @@ async function getMvp(message, range){
 module.exports = {
 	name: 'et2',
 	description: 'Endless Tower Boss List (SEA)',
+  hidden: true,
 	async execute(message, args) {
     message.react('🆗').catch(e=>console.log(e));
     const dbImage = await db.get('et').then(res => res[0]) || {};
