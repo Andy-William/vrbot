@@ -18,7 +18,7 @@ module.exports = {
 	schedule: '* 4-23 * * *',
 	async action() {
     // update random card from more than 6 hours ago
-    db.getRandom('cards', {lastRequest: {$lt: new Date()/1000-60*60*6}}).then(async (res)=>{
+    db.getRandom('cards', {lastRequest: {$not: {$gt: new Date()/1000-60*60*6}}}).then(async (res)=>{
       for( let i=0 ; i<res.length ; i++ ){
         const cards = await poring.getPrice(res[i].name).catch(e=>{
           console.log(e);

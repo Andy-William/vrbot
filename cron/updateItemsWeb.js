@@ -18,7 +18,7 @@ module.exports = {
   // now: true,
 	async action() {
     // update random item from more than 6 hours ago
-    db.getRandom('items', {lastRequest: {$lt: new Date()/1000-60*60*6 }}).then(async (res)=>{
+    db.getRandom('items', {lastRequest: {$not: {$gt: new Date()/1000-60*60*6}}}).then(async (res)=>{
       if( res.length == 0 ) return;
       const items = await poring.getPrice(res[0].name).catch(e=>{
           console.log(e);
