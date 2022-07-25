@@ -5,9 +5,9 @@ const token = process.env.DISCORD_BOT_TOKEN;
 const clientId = process.env.CLIENT_ID;
 const guildId = process.env.DEV_SERVER_ID;
 
-
 const fs = require('node:fs');
 const { SlashCommandBuilder } = require('@discordjs/builders');
+const { ApplicationCommandOptionType } = require('discord.js');
 
 const commands = [];
 const commandFiles = fs.readdirSync(__dirname+'/../commands').filter(file => file.endsWith('.js'));
@@ -18,12 +18,25 @@ for (const file of commandFiles) {
   const data = new SlashCommandBuilder()
     .setName(command.name)
     .setDescription(command.description)
+
+  for( const option of command.options||[] ){
+    if( option.type == ApplicationCommandOptionType.String ){
+      data.addStringOption(o=>{
+        o.setName(option.name)
+          .setDescription(option.description)
+          .setRequired(option.required);
+        if( option.choices ) o.addChoices(...option.choices);
+        return o;
+      })
+    }
+  }
+
   commands.push(data.toJSON());
 }
 
 console.log(commands)
 
-const rest = new REST({ version: '9' }).setToken(token);
+const rest = new REST({ version: '10' }).setToken(token);
 
 (async () => {
   try {
@@ -32,6 +45,7 @@ const rest = new REST({ version: '9' }).setToken(token);
     await rest.put(
       Routes.applicationCommands(clientId),
       { body: commands },
+      // { body: [] },
     );
 
     console.log('Successfully reloaded application (/) commands.');
