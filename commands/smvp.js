@@ -1,4 +1,5 @@
 const currentWeek = require("./../lib/time.js");
+const { ApplicationCommandOptionType } = require('discord.js');
 
 const smvpList = {
   "Glast Heim Hall": [
@@ -42,12 +43,35 @@ const smvpList = {
 module.exports = {
   name: "smvp",
   description: "Special MVP Info",
-  async execute(message, args) {
+  options: [
+    {
+      type: ApplicationCommandOptionType.Integer,
+      name: 'week',
+      description: 'Check drop on next x week (default: 0)',
+      min: 0,
+      max: 52,
+      required: false
+    }
+  ],
+  async processMessage(message, args) {
     const weekNum = currentWeek.week(new Date());
     let str = "SMVP for this week:\n";
     Object.entries(smvpList).forEach(([location, smvps]) => {
       str += location + ": **" + smvps[weekNum % smvps.length] + "**\n";
     });
-    return message.channel.send(str);
+    await message.channel.send(str);
+  },
+  async processInteraction(interaction) {
+    const skip = interaction.options.getInteger('week')||0;
+    const weekNum = currentWeek.week(new Date()) + skip;
+    let str;
+    if( skip == 0 ) str = "SMVP for this week:\n";
+    else if ( skip == 1 ) str = "SMVP for next week:\n";
+    else str = "SMVP for "+ skip + " weeks from now:\n";
+
+    Object.entries(smvpList).forEach(([location, smvps]) => {
+      str += location + ": **" + smvps[weekNum % smvps.length] + "**\n";
+    });
+    await interaction.reply(str);
   }
 };
