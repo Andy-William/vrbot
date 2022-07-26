@@ -24,8 +24,18 @@ for (const file of commandFiles) {
       data.addStringOption(o=>{
         o.setName(option.name)
           .setDescription(option.description)
-          .setRequired(option.required);
+          .setRequired(option.required||false);
         if( option.choices ) o.addChoices(...option.choices);
+        return o;
+      })
+    }
+    else if( option.type == ApplicationCommandOptionType.Integer ){
+      data.addIntegerOption(o=>{
+        o.setName(option.name)
+          .setDescription(option.description)
+          .setRequired(option.require||false);
+        if( option.min ) o.setMinValue(option.min);
+        if( option.max ) o.setMaxValue(option.max);
         return o;
       })
     }

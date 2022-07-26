@@ -99,7 +99,7 @@ module.exports = {
     {
       type: ApplicationCommandOptionType.String,
       name: 'color',
-      description: 'white, green, blue, purple, mini, mvp, craft (leave blank for gram dust). Separate multiple colors with space',
+      description: 'white, green, blue, purple, mini, mvp, craft (leave blank for gram dust). Separate with space',
       // choices: [
       //   {name: 'white', value: 'white'},
       //   {name: 'green', value: 'green'},

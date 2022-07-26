@@ -22,10 +22,10 @@ module.exports = {
 	async processMessage(message, args) {
     message.react('🆗');
     const imageUrl = await getCakeUrl();
-    return message.channel.send({files: [imageUrl]})
+    await message.channel.send({files: [imageUrl]})
 	},
   async processInteraction(interaction){
     const imageUrl = await getCakeUrl();
-    interaction.reply({files: [imageUrl]});
+    await interaction.reply({files: [imageUrl]});
   }
 };

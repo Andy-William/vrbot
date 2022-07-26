@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const Canvas = require('canvas');
-const Discord = require('discord.js');
+const { ApplicationCommandOptionType, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const fs = require('fs');
 const md5 = require('md5');
 const assets = require('./../lib/assets.js')
@@ -14,14 +14,33 @@ Canvas.registerFont('./assets/fonts/MochiyPopPOne-Regular.ttf', {family: "Mochiy
 const mvpUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSaCPGUYKYyrbJkLpkYq4KHUxWt8iptJzjLCCZ22wyVGc2yiKv2dXl8TghvDRcfLirTlJ_wL3rXcWCX/pub?gid=1364391805&single=true&output=csv'
 const cacheDirectory = './tmp/'
 
-const mvpLv = [3,6,10,13,16,20,23,26,30,33,36,40,43,46,50,53,56,60,63,66,70,74,77,80,84,87,90,94,97,100]
-function getBosses(url){
-  const cached = cache.get(url)
-  if( cached ) return new Promise((resolve, reject)=>resolve(cached));
+const themes ={
+  dark: {
+    imgBgColor: '#222222',
+    tenBgColor: '#444444',
+    altBgColor: '#222222',
+    lineColor: '#0091EA',
+    fontColor: '#F0F8FF',
+    tenFontColor: '#e69199',
+  },
+  light: {
+    imgBgColor: '#FFFFFF',
+    tenBgColor: '#FFCCCC',
+    altBgColor: '#CCCCCC',
+    lineColor: '#444444',
+    fontColor: '#000000',
+    tenFontColor: '#FF0000',
+  }
+}
 
-  let res = {bosses: {}, updated: "", source: ""}
-  console.log('fetching ' + url)
-  return fetch(url).then(res => res.text()).then(data=>{
+const mvpLv = [3,6,10,13,16,20,23,26,30,33,36,40,43,46,50,53,56,60,63,66,70,74,77,80,84,87,90,94,97,100]
+async function getBosses(url){
+  const cached = cache.get(url);
+  if( cached ) return cached;
+
+  let res = {bosses: {}, updated: "", source: ""};
+  console.log('fetching ' + url);
+  return await fetch(url).then(res => res.text()).then(data=>{
     let table = CSV.CSVToArray(data);
 
     let bosses = {};
@@ -45,19 +64,16 @@ function getBosses(url){
   }).catch((e)=>{console.log(e); return {}});
 }
 
-async function drawImage(data, type, message){
+async function drawImage(data, theme){
   // check if picture already cached
-  const hash = md5(JSON.stringify(data)) + '.png';
+  const hash = md5(JSON.stringify(data)) + `-${theme}.png`;
   try{
-    if( message.content.match(/--nocache/i) ) throw 'no cache'
     const picture = fs.readFileSync(cacheDirectory + hash);
     return [Buffer.from(picture), data.updated, data.source];
   } catch (e) {
-    console.log('redrawing ' + type);
-    if( type == 'mvp' ) message.react('🎨');
-    else message.react('🖌');
+    console.log('redrawing ET');
   };
-  
+
   // if not, create new picture
   const entries = Object.entries(data.bosses);
   const titleSize = 80;  // tulisan judul yang di atas
@@ -67,12 +83,13 @@ async function drawImage(data, type, message){
   const verticalBuffer = 8;  // jarak dari gambar ke garis batas row
   const imageSize = 45;  // ukuran gambar
   const footerSize = 35; // footer
-  const imgBgColor = "#222222";
-  const tenBgColor = "#444444"; // 10 floor boss bgcolor
+  const imgBgColor = themes[theme].imgBgColor;
+  const tenBgColor = themes[theme].tenBgColor; // 10 floor boss bgcolor
+  const altBgColor = themes[theme].altBgColor; // zebra color per row
   const lineWidth = 3;
-  const lineColor = '#0091EA';
-  const fontColor = '#F0F8FF';
-  const tenFontColor = '#e69199'; // 10 floor boss floor font color
+  const lineColor = themes[theme].lineColor;
+  const fontColor = themes[theme].fontColor;
+  const tenFontColor = themes[theme].tenFontColor; // 10 floor boss floor font color
 
   const canvas = Canvas.createCanvas(
     channelSize + entries[0][1].length*horizontalBuffer*2 + entries[0][1].length*imageSize,
@@ -92,6 +109,13 @@ async function drawImage(data, type, message){
   const maxSize = channelSize / ctx.measureText(data.source).width; // max font size for small A1 cell
   ctx.font = `${maxSize}px Mochiy Pop P One`
   ctx.fillText(data.source, channelSize/2, titleSize + headerSize/2);
+
+  ctx.beginPath();
+  ctx.lineWidth = lineWidth;
+  ctx.strokeStyle = lineColor;
+  ctx.moveTo(0, titleSize);
+  ctx.lineTo(canvas.width, titleSize);
+  ctx.stroke();
 
   ctx.beginPath();
   ctx.lineWidth = lineWidth;
@@ -128,18 +152,36 @@ async function drawImage(data, type, message){
 
   for( let i=0 ; i< entries.length ; i++ ){
     const [channel, floor] = entries[i];
+    if( i%2==0 ){
+      ctx.fillStyle = altBgColor
+      ctx.fillRect(
+        0,
+        titleSize + headerSize + i*(verticalBuffer*2+imageSize*3) + lineWidth/2,
+        channelSize - lineWidth/2,
+        verticalBuffer*2+imageSize*3 - lineWidth
+      )
+    }
     ctx.fillStyle = fontColor;
     ctx.fillText('CH'+channel%10, channelSize/2, titleSize + headerSize + verticalBuffer + i*(verticalBuffer*2+imageSize*3) + imageSize*3/2  )
-    
+
     ctx.beginPath();
     ctx.moveTo(0, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize*3));
     ctx.lineTo(canvas.width, titleSize + headerSize + (i+1)*(verticalBuffer*2+imageSize*3));
     ctx.stroke();
-    
+
     let offset = channelSize;
     for( let j=0 ; j<floor.length ; j++ ){
       if( mvpLv[j]%10==0 ){
         ctx.fillStyle = tenBgColor
+        ctx.fillRect(
+          offset + lineWidth/2,
+          titleSize + headerSize + i*(verticalBuffer*2+imageSize*3) + lineWidth/2,
+          imageSize + horizontalBuffer*2 - lineWidth,
+          verticalBuffer*2+imageSize*3 - lineWidth
+        )
+      }
+      else if( i%2==0 ){
+        ctx.fillStyle = altBgColor
         ctx.fillRect(
           offset + lineWidth/2,
           titleSize + headerSize + i*(verticalBuffer*2+imageSize*3) + lineWidth/2,
@@ -162,13 +204,13 @@ async function drawImage(data, type, message){
       offset += imageSize + horizontalBuffer;
     }
   }
-  
+
   ctx.font = '24px Mochiy Pop P One';
   ctx.textBaseline = 'bottom';
   ctx.textAlign = 'left';
   ctx.fillStyle = fontColor;
   ctx.fillText('Updated ' + data.updated, 0, canvas.height);
-  
+
   ctx.textAlign = 'right';
   ctx.fillText('Source: ' + data.source, canvas.width, canvas.height);
 
@@ -185,7 +227,7 @@ async function drawImage(data, type, message){
   return [buf, data.updated, data.source];
 }
 
-async function getMvp(message, range){
+async function getMvp(from, to, theme){
   const data = await getBosses(mvpUrl);
   const floors = Object.keys(data.bosses);
   let values = [];
@@ -194,7 +236,7 @@ async function getMvp(message, range){
     const bosses = data.bosses[floor];
     let sum = 0;
     for( let j=0 ; j<bosses.length ; j++ ){
-      if( mvpLv[j] >= range[0] && mvpLv[j] <= range[1] ){
+      if( mvpLv[j] >= from && mvpLv[j] <= to ){
         for( let k=0 ; k<bosses[j].length ; k++ ){
           sum += await mvp.getValue(bosses[j][k])
         }
@@ -202,42 +244,101 @@ async function getMvp(message, range){
     }
     values.push([sum, floor%10]);
   }
-  return drawImage(data, 'mvp', message).then((res)=>[...res, values]);
+  const [image, updated, source] = await drawImage(data, theme);
+  return [image, updated, source, values];
+}
+
+async function getEtEmbed(from, to, theme){
+  const [image, updated, source, values] = await getMvp(from, to, theme)
+
+  const attachment = new AttachmentBuilder(image, {name: 'mvp.png'})
+  const embed = new EmbedBuilder()
+    .setTitle('ET MVP List')
+    .setDescription('Updated ' + updated)
+    // .setURL(source)
+    .addFields(
+      {
+        name: 'Suggested Channels from floor ' + from + ' to ' + to + ' (with score)',
+        value: values.sort((a,b)=>b[0]-a[0]).map(v=>`${v[1]} - ${Math.round(v[0])}`).join('\n')
+      },
+    )
+    .setImage('attachment://mvp.png')
+
+  return [embed, attachment];
 }
 
 module.exports = {
 	name: 'et',
   alias: '^ett+$',
 	description: 'Endless Tower Boss List (SEA)',
-	async execute(message, args) {
+  options: [
+    {
+      type: ApplicationCommandOptionType.Integer,
+      name: 'start',
+      description: 'Starting floor for score calculation',
+      min: 1,
+      max: 100,
+      required: false
+    }, {
+      type: ApplicationCommandOptionType.Integer,
+      name: 'end',
+      description: 'Ending floor for score calculation',
+      min: 1,
+      max: 100,
+      required: false
+    }, {
+      type: ApplicationCommandOptionType.String,
+      name: 'theme',
+      description: 'Color theme',
+      choices: [
+        {name: 'dark', value: 'dark'},
+        {name: 'light', value: 'light'},
+      ],
+      required: false
+    }
+  ],
+
+	async processMessage(message, args) {
     message.react('🆗').catch(e=>console.log(e));
+    // get et no score
     const dbImage = await db.get('et').then(res => res[0]) || {};
     if( dbImage.created_at > new Date ){
-      image = dbImage.url;
-      return message.channel.send({files: [image]})
+      imageUrl = dbImage.url;
+      return await message.channel.send({files: [imageUrl]})
     }
 
     let range = [1,100]
     if( args ){
       range = [parseInt(args[0])||1, parseInt(args[1]||100)]
     }
-    return getMvp(message, range).then(([image, updated, source, values])=>{
-      const embed = new Discord.MessageEmbed()
-        .setTitle('ET MVP List')
-        .setDescription('Updated ' + updated)
-        // .setURL(source)
-        .addFields(
-          { 
-            name: 'Suggested Channels from floor ' + range[0] + ' to ' + range[1] + ' (with score)',
-            value: values.sort((a,b)=>b[0]-a[0]).map(v=>`${v[1]} - ${Math.round(v[0])}`).join('\n')
-          },
-        )
-        .attachFiles([new Discord.MessageAttachment(image, 'mvp.png')])
-        .setImage('attachment://mvp.png')
-      return message.channel.send(embed)
-    }).catch((err)=>{
+
+    try{
+      const [embed, file] = await getEtEmbed(...range, 'dark')
+      return message.channel.send({embeds: [embed], files:[file]})
+    } catch(err){
       console.log(err);
       return message.channel.send('Failed to send picture');
-    });
+    }
 	},
-};  
+  async processInteraction(interaction) {
+    // get et no score
+    const dbImage = await db.get('et').then(res => res[0]) || {};
+    if( dbImage.created_at > new Date ){
+      imageUrl = dbImage.url;
+      return await interaction.reply({files: [imageUrl]})
+    }
+
+    await interaction.deferReply();
+    const from = interaction.options.getInteger('start')||1;
+    const to = interaction.options.getInteger('end')||100;
+    const theme = interaction.options.getString('theme')||'dark';
+
+    try{
+      const [embed, file] = await getEtEmbed(from, to, theme)
+      return interaction.editReply({embeds: [embed], files:[file]})
+    } catch(err){
+      console.log(err);
+      return interaction.editReply('Failed to send picture');
+    }
+  }
+};
