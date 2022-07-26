@@ -1,5 +1,5 @@
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
-const Discord = require('discord.js');
+const { ApplicationCommandOptionType, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 
 const odds = {
   1: [200],
@@ -36,11 +36,113 @@ function randomOnce(level){
   return result
 }
 
+async function drawImage(level){
+  let current = 0;
+  let rolls = 0;
+
+  let dataPoint = [0]
+  let dataColor = ["white"]
+
+  while( current < level ){
+    let next = randomOnce(level);
+    if( next > current ){
+      current = next;
+      dataColor.push("lime");
+    }
+    else dataColor.push("white");
+    dataPoint.push(current)
+    rolls+=1;
+  }
+
+  console.log('simul done')
+
+  let width = 35 + dataPoint.length*5
+  if( width > 1024 ) width = 1024
+  const height = 300;
+  const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+  const gridColor = new Array(16).fill('rgba(255,255,255,0.2)')
+  gridColor[level] = 'cyan'
+
+  const configuration = {
+    type: 'line',
+    data: {
+        labels: dataPoint.map(()=>""),
+        datasets: [{
+          fill: false,
+          lineTension: 0,
+          borderColor: "rgba(50,200,50,0.5)",
+          data: dataPoint,
+          pointBackgroundColor: dataColor
+        }]
+    },
+    options: {
+      plugins: {
+        legend: {display: false}
+      },
+      showLine: true,
+      scales: {
+        y: {
+          min:0,
+          max:15,
+          ticks: {
+            stepSize: 1,
+            font: {  size:12, weight:'bold'}
+          },
+          position: 'left',
+          grid:{
+            color: gridColor
+          }
+        },
+        x:{
+          grid: {display: false}
+        }
+      }
+    }
+  };
+  const image = await chartJSNodeCanvas.renderToBuffer(configuration);
+  console.log('drawing done')
+
+  return [image, rolls];
+}
+
+async function getEmbed(level){
+  const [image, rolls] = await drawImage(level);
+  const attachment = new AttachmentBuilder(image, {name: 'extract.png'});
+
+  const embed = new EmbedBuilder()
+    .setTitle(`Oracle Mirror simulator +${level}`)
+    .setDescription(`Completed after **${rolls}x** rolls!`)
+    .addFields(
+      {
+        name: 'Initial Cost',
+        value: `${costs[level]} <:ExtractLightCrystal:771330344443838474>`,
+        inline: true
+      }, {
+        name: `Reroll Cost`,
+        value: `${rolls*4} <:ExtractLightCrystal:771330344443838474>\n${rolls*20} <:BCC:935995477881663488>`,
+        inline: true
+      }
+    )
+    .setImage('attachment://extract.png')
+
+  return [embed, attachment];
+}
+
 module.exports = {
 	name: 'extract',
   alias: '^re$',
 	description: 'Oracle Mirror Extraction Simulator',
-	async execute(message, args) {
+  options: [
+    {
+      type: ApplicationCommandOptionType.Integer,
+      name: 'level',
+      description: 'Extraction item refine level (default: 15)',
+      min: 1,
+      max: 15,
+      required: false
+    }
+  ],
+	async processMessage(message, args) {
     if( !args[0] ) return message.reply('Usage: `extract <space> level`');
     const level = parseInt(args[0]);
 
@@ -53,89 +155,15 @@ module.exports = {
     }
 
     await message.react('🆗');
-    let current = 0;
-    let rolls = 0;
+    const [embed, file] = await getEmbed(level);
 
-    let dataPoint = [0]
-    let dataColor = ["white"]
-
-    while( current < level ){
-      let next = randomOnce(level);
-      if( next > current ){
-        current = next;
-        dataColor.push("lime");
-      }
-      else dataColor.push("white");
-      dataPoint.push(current)
-      rolls+=1;
-    }
-
-    console.log('simul done')
-
-    let width = 35 + dataPoint.length*5
-    if( width > 1024 ) width = 1024
-    const height = 300;
-    const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
-    const gridColor = new Array(16).fill('rgba(255,255,255,0.2)')
-    gridColor[level] = 'cyan'
-
-    const configuration = {
-      type: 'line',
-      data: {
-          labels: dataPoint.map(()=>""),
-          datasets: [{
-            fill: false,
-            lineTension: 0,
-            borderColor: "rgba(50,200,50,0.5)",
-            data: dataPoint,
-            pointBackgroundColor: dataColor
-          }]
-      },
-      options: {
-        plugins: {
-          legend: {display: false}
-        },
-        showLine: true,
-        scales: {
-          y: {
-            min:0,
-            max:15,
-            ticks: {
-              stepSize: 1,
-              font: {  size:12, weight:'bold'}
-            },
-            position: 'left',
-            grid:{
-              color: gridColor
-            }
-          },
-          x:{
-            grid: {display: false}
-          }
-        }
-      }
-    };
-    const image = await chartJSNodeCanvas.renderToBuffer(configuration);
-    console.log('drawing done')
-
-    const embed = new Discord.MessageEmbed()
-      .setTitle(`Oracle Mirror simulator +${level}`)
-      .setDescription(`Completed after **${rolls}x** rolls!`)
-      .addFields(
-        {
-          name: 'Initial Cost',
-          value: `${costs[level]} <:ExtractLightCrystal:771330344443838474>`,
-          inline: true
-        }, {
-          name: `Reroll Cost`,
-          value: `${rolls*4} <:ExtractLightCrystal:771330344443838474>\n${rolls*20} <:BCC:935995477881663488>`,
-          inline: true
-        }
-      )
-      .attachFiles([new Discord.MessageAttachment(image, 'extract.png')])
-      .setImage('attachment://extract.png')
-    return await message.channel.send(embed);
-
+    await message.channel.send({embeds: [embed], files: [file]});
 	},
+  async processInteraction(interaction){
+    await interaction.deferReply();
+    const level = interaction.options.getInteger('level')||15;
+    const [embed, file] = await getEmbed(level);
+
+    await interaction.editReply({embeds: [embed], files:[file]});
+  }
 };
-  

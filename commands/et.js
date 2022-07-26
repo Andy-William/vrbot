@@ -289,7 +289,7 @@ module.exports = {
     }, {
       type: ApplicationCommandOptionType.String,
       name: 'theme',
-      description: 'Color theme',
+      description: 'Color theme (default: dark)',
       choices: [
         {name: 'dark', value: 'dark'},
         {name: 'light', value: 'light'},
@@ -314,7 +314,7 @@ module.exports = {
 
     try{
       const [embed, file] = await getEtEmbed(...range, 'dark')
-      return message.channel.send({embeds: [embed], files:[file]})
+      return message.channel.send({embeds: [embed], files: [file]})
     } catch(err){
       console.log(err);
       return message.channel.send('Failed to send picture');
@@ -335,10 +335,10 @@ module.exports = {
 
     try{
       const [embed, file] = await getEtEmbed(from, to, theme)
-      return interaction.editReply({embeds: [embed], files:[file]})
+      await interaction.editReply({embeds: [embed], files:[file]})
     } catch(err){
       console.log(err);
-      return interaction.editReply('Failed to send picture');
+      await interaction.editReply('Failed to send picture');
     }
   }
 };
