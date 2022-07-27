@@ -1,4 +1,5 @@
 const reminder = require('./../lib/reminder.js');
+const { ApplicationCommandOptionType } = require('discord.js');
 
 function usage(message){
   message.reply('Usage: `reminder <space> on/off`');
@@ -7,9 +8,22 @@ function usage(message){
 module.exports = {
 	name: 'reminder',
 	description: 'Reminder event RO',
-	async execute(message, args) {
+  permission: 16, // manage channel
+  options:[
+    {
+      type: ApplicationCommandOptionType.String,
+      name: 'set',
+      description: 'Set reminder (on/off)',
+      choices: [
+        {name: 'on', value: 'on'},
+        {name: 'off', value: 'off'},
+      ],
+      required: true
+    }
+  ],
+	async processMessage(message, args) {
     if( args.length == 0 ) return usage(message);
-    
+
     if( args[0].toLowerCase() === 'on' ){
       reminder.set(message.channel.id, true);
       return message.channel.send('Reminder turned on for this channel.')
@@ -20,4 +34,16 @@ module.exports = {
     }
     else return usage(message);
 	},
+  async processInteraction(interaction){
+    const status = interaction.options.getString('set');
+
+    if( status == 'on' ){
+      reminder.set(interaction.channelId, true);
+      await interaction.reply({content: 'Reminder turned on for this channel', ephemeral: true})
+    }
+    else if( status == 'off' ){
+      reminder.set(interaction.channelId, false);
+      await interaction.reply({content: 'Reminder turned off for this channel', ephemeral: true})
+    }
+  }
 };

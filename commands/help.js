@@ -18,7 +18,7 @@ Simulators
 /refine ➜ Refining simulator
 
 Others
-/reminder ➜ Event and maintenance reminder
+/reminder ➜ Event and maintenance reminder (channel admin only)
 /help ➜ Commands List
 /invite ➜ Link to invite me
 

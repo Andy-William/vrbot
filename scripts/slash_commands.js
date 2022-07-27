@@ -19,6 +19,8 @@ for (const file of commandFiles) {
     .setName(command.name)
     .setDescription(command.description)
 
+  if( command.permission ) data.setDefaultMemberPermissions(command.permission);
+
   for( const option of command.options||[] ){
     if( option.type == ApplicationCommandOptionType.String ){
       data.addStringOption(o=>{

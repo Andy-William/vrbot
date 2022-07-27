@@ -13,7 +13,7 @@ module.exports = {
   listener: /^[^\w]*cake|^$/i,
 	description: 'Admin Stuff',
   hidden: true,
-	async execute(message, args) {
+	async processMessage(message, args) {
     if( message.channel.id == process.env.DEV_CHANNEL_ID ){
       switch(args[0]){
         case 'vr':
