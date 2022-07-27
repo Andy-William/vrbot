@@ -17,7 +17,7 @@ app.get("/tos", (request, response) => {
 app.get("/privacy", (request, response) => {
   try{
     response.set('Content-Type', 'text/html');
-    response.send("We do not safe any user data, however, we log incoming chat to keep up the quality of service.");
+    response.send("We do not store any user data, however, we log incoming chat to keep up the quality of service.");
   }catch(e){
     console.log(e);
   }

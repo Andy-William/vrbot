@@ -130,7 +130,7 @@ module.exports = {
 
     let msgs = str.match(/.{1,1988}(\n|$)/gs); // split message every 2000 chars
     for( let i=0 ; i<msgs.length ; i++ ){
-      if( i==0 ) await interaction.reply("```json\n"+msgs[i]+"```")
+      if( i==0 ) await interaction.reply("```json\n"+msgs[i]+"```");
       else await interaction.followUp("```json\n"+msgs[i]+"```");
     }
   }

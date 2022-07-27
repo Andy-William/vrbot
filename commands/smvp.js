@@ -67,7 +67,7 @@ module.exports = {
     let str;
     if( skip == 0 ) str = "SMVP for this week:\n";
     else if ( skip == 1 ) str = "SMVP for next week:\n";
-    else str = "SMVP for "+ skip + " weeks from now:\n";
+    else str = `SMVP for ${skip} weeks from now:\n`;
 
     Object.entries(smvpList).forEach(([location, smvps]) => {
       str += location + ": **" + smvps[weekNum % smvps.length] + "**\n";
