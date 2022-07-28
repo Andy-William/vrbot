@@ -41,6 +41,14 @@ for (const file of commandFiles) {
         return o;
       })
     }
+    else if( option.type == ApplicationCommandOptionType.Boolean ){
+      data.addBooleanOption(o=>{
+        o.setName(option.name)
+          .setDescription(option.description)
+          .setRequired(option.require||false);
+        return o;
+      })
+    }
   }
 
   commands.push(data.toJSON());
