@@ -5,3 +5,4 @@ tmp/*
 .breakpoints
 .replit
 replit.nix
+pykms_logclient.log
