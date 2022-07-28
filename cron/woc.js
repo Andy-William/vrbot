@@ -1,4 +1,4 @@
-const announce = require('./../lib/announce.js');
+const announce = require('../lib/announce.js');
 
 module.exports = {
 	name: 'woc 15 minutes reminder',

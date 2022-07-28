@@ -1,5 +1,5 @@
-const db = require('./../lib/mongo.js');
-const poring = require('./../lib/poring.js');
+const db = require('../lib/mongo.js');
+const poring = require('../lib/poring.js');
 
 function dbUpdateCard(card){
   return {
@@ -47,7 +47,7 @@ module.exports = {
     let itemUpdates = []
 
     let all = new Set()
-  
+
     data.forEach(d=>{
       if( d.id == 700142 ) return; // fake ice cube
       if( all.has(d.name) ) console.log('duplicate: ' + d.name);
@@ -83,7 +83,7 @@ module.exports = {
           // console.log(d)
       }
     })
-    
+
     console.log(cardUpdates.length, petUpdates.length, itemUpdates.length)
 
     await db.bulkUpdate('cards', cardUpdates, false);

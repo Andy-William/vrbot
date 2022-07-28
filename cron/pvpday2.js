@@ -1,5 +1,4 @@
-const announce = require('./../lib/announce.js');
-// const currentWeek = require("./../lib/time.js");
+const announce = require('../lib/announce.js');
 
 module.exports = {
 	name: '12v12 rank day reminder',

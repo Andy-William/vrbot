@@ -1,4 +1,4 @@
-const reminder = require('./../lib/reminder.js');
+const reminder = require('../lib/reminder.js');
 const { ApplicationCommandOptionType } = require('discord.js');
 
 function usage(message){

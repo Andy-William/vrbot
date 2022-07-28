@@ -1,5 +1,5 @@
-const announce = require('./../lib/announce.js');
-const currentWeek = require("./../lib/time.js");
+const announce = require('../lib/announce.js');
+const currentWeek = require('../lib/time.js');
 
 const events = [
   "<:kafrab:671889485176242225> **Battle of Kafra** registration is open at South Gate! <:kafrab:671889485176242225>",

@@ -1,4 +1,4 @@
-const db = require('./../lib/mongo.js');
+const db = require('../lib/mongo.js');
 
 const odds = {
   "New Costume": 2,

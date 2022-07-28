@@ -3,11 +3,11 @@ const Canvas = require('canvas');
 const { ApplicationCommandOptionType, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const fs = require('fs');
 const md5 = require('md5');
-const assets = require('./../lib/assets.js')
-const cache = require('./../lib/cache.js');
-const mvp = require('./../lib/mvp.js');
-const db = require('./../lib/mongo.js');
-const CSV = require('./../lib/csv.js');
+const assets = require('../lib/assets.js')
+const cache = require('../lib/cache.js');
+const mvp = require('../lib/mvp.js');
+const db = require('../lib/mongo.js');
+const CSV = require('../lib/csv.js');
 
 Canvas.registerFont('./assets/fonts/MochiyPopPOne-Regular.ttf', {family: "Mochiy Pop P One"})
 

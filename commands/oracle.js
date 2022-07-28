@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
-const db = require('./../lib/mongo.js');
-const lastReset = require('./../lib/time.js');
-const cache = require('./../lib/cache.js');
+const db = require('../lib/mongo.js');
+const lastReset = require('../lib/time.js');
+const cache = require('../lib/cache.js');
 
 async function getOracleUrl(){
   // default image

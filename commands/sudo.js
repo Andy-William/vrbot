@@ -1,5 +1,5 @@
-const db = require('./../lib/mongo.js');
-const reset = require('./../lib/time.js');
+const db = require('../lib/mongo.js');
+const reset = require('../lib/time.js');
 
 const fetch = require('node-fetch');
 const Canvas = require('canvas');
@@ -99,7 +99,7 @@ module.exports = {
           break;
         case 'guildlist':
           let guilds = [];
-          require('./../lib/bot.js').client.guilds.cache.forEach((guild) => {
+          require('../lib/bot.js').client.guilds.cache.forEach((guild) => {
             guilds.push(guild.name)
           });
           const str = guilds.join("\n");

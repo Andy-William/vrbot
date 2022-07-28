@@ -1,5 +1,5 @@
-const db = require('./../lib/mongo.js');
-const poring = require('./../lib/poringWeb.js');
+const db = require('../lib/mongo.js');
+const poring = require('../lib/poringWeb.js');
 
 function dbUpdateData(item){
   return {

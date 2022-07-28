@@ -1,4 +1,4 @@
-const currentWeek = require("./../lib/time.js");
+const currentWeek = require('../lib/time.js');
 const { ApplicationCommandOptionType } = require('discord.js');
 
 const smvpList = {

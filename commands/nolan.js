@@ -1,4 +1,4 @@
-const db = require('./../lib/mongo.js');
+const db = require('../lib/mongo.js');
 
 async function odds(){
   if( this.odds ) return this.odds;

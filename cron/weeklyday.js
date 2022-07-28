@@ -1,5 +1,5 @@
-const announce = require('./../lib/announce.js');
-const currentWeek = require("./../lib/time.js");
+const announce = require('../lib/announce.js');
+const currentWeek = require('../lib/time.js');
 
 const events = [
   "<:kafrab:671889485176242225> Today's event is **Battle of Kafra** at 20:00 server time <:kafrab:671889485176242225>",

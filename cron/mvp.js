@@ -1,5 +1,5 @@
-const announce = require('./../lib/announce.js');
-const currentWeek = require("./../lib/time.js");
+const announce = require('../lib/announce.js');
+const currentWeek = require('../lib/time.js');
 
 module.exports = {
 	name: 'mvp battle reminder',

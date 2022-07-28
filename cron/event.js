@@ -1,5 +1,5 @@
-const announce = require('./../lib/announce.js');
-const serverTime = require("./../lib/time.js");
+const announce = require('../lib/announce.js');
+const serverTime = require('../lib/time.js');
 
 module.exports = {
 	name: 'Loli Ruri Shadow reminder',
@@ -7,7 +7,7 @@ module.exports = {
 	async action() {
     let city;
     switch( serverTime.currentHour() ){
-      case 5: 
+      case 5:
         city = "Prontera"
         break
       case 10:
@@ -20,6 +20,6 @@ module.exports = {
         city = "Payon"
         break
     }
-    announce("God of Wealth visits **" + city + "**! Claim your God of Wealth Lucky Bag") 
+    announce("God of Wealth visits **" + city + "**! Claim your God of Wealth Lucky Bag")
   },
 };

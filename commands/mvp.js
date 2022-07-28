@@ -1,4 +1,4 @@
-const mvp = require('./../lib/mvp.js');
+const mvp = require('../lib/mvp.js');
 const { ApplicationCommandOptionType } = require('discord.js');
 
 module.exports = {

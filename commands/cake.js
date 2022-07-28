@@ -1,5 +1,4 @@
-const db = require('./../lib/mongo.js');
-const lastReset = require('./../lib/time.js');
+const db = require('../lib/mongo.js');
 
 async function getCakeUrl(){
   // default image

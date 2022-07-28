@@ -1,4 +1,4 @@
-const mvp = require('./../lib/mvp.js');
+const mvp = require('../lib/mvp.js');
 
 module.exports = {
 	name: 'update mvp values',

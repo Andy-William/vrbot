@@ -1,4 +1,4 @@
-const db = require('./../lib/mongo.js');
+const db = require('../lib/mongo.js');
 
 async function getPets(){
   const data = await db.get('pets', {}, {"_id": 1});

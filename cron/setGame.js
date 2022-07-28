@@ -1,4 +1,4 @@
-const client = require('./../lib/bot.js').client;
+const client = require('../lib/bot.js').client;
 
 const games = [
   'Ragnarok M: Eternal Love',

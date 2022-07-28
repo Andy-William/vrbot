@@ -1,5 +1,5 @@
-const db = require('./../lib/mongo.js');
-const cache = require('./../lib/cache.js');
+const db = require('../lib/mongo.js');
+const cache = require('../lib/cache.js');
 const { ApplicationCommandOptionType } = require('discord.js');
 
 async function getLuckyList(limit){
