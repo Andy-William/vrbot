@@ -2,8 +2,8 @@ const db = require('./../lib/mongo.js');
 const lastReset = require('./../lib/time.js');
 
 async function getCakeUrl(){
-  // default meme image
-  let image = "https://cdn.discordapp.com/attachments/555311795771015193/859330516061650954/triple-chocolate-peanut-butter-layer-cake-18727d0.png";
+  // default image
+  let image = "https://media.discordapp.net/attachments/877551130522034257/1002086279799906304/unknown.png";
 
   const dbImage = await db.get('cake').then(res => res[0]) || {};
 

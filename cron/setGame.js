@@ -1,7 +1,11 @@
 const client = require('./../lib/bot.js').client;
 
 const games = [
-  '!help for command list'
+  'Ragnarok M: Eternal Love',
+  'Ragnarok M: Eternal Love',
+  'Ragnarok M: Eternal Love',
+  'Ragnarok M: Eternal Love',
+  'Ragnarok M: Eternal Snap',
 ]
 
 function setRandomGame(){
