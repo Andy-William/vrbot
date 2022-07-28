@@ -26,42 +26,56 @@ const internalOdds = {
   "Zeny+Page": true
 }
 
+async function getFeast(){
+  let random = Math.random() * 100;
+  let typeResult;
+  let result;
+
+  for(const [type, odd] of Object.entries(odds)){
+    if( random < odd ){
+      typeResult = type
+      break;
+    }
+    random -= odd;
+  }
+
+  if( internalOdds[typeResult] ){
+    const items = await db.get('feast', {type: typeResult})
+    let oddSum = 0
+    items.forEach(item=>oddSum+=item.weight);
+    random = Math.random() * oddSum;
+    for(let item of items){
+      if( random < item.weight ){
+        result = item.name
+        break;
+      }
+      random -= item.weight;
+    }
+  }
+  else{
+    result = (await db.getRandom('feast', {type: typeResult}))[0].name;
+  }
+
+  return `**${result}**${typeResult.match(/^New/)?` (${typeResult})`:''}`;
+}
+
 module.exports = {
 	name: 'feast',
 	description: 'Feast Gacha Simulator',
-	async execute(message, args) {
+	async processMessage(message, args) {
+    const result = await getFeast();
 
-    let random = Math.random() * 100;
-    let typeResult;
-    let result;
-
-    for(const [type, odd] of Object.entries(odds)){
-      if( random < odd ){
-        typeResult = type
-        break;
-      }
-      random -= odd;
-    }
-
-    if( internalOdds[typeResult] ){
-      const items = await db.get('feast', {type: typeResult})
-      let oddSum = 0
-      items.forEach(item=>oddSum+=item.weight);
-      random = Math.random() * oddSum;
-      for(let item of items){
-        if( random < item.weight ){
-          result = item.name
-          break;
-        }
-        random -= item.weight;
-      }
-    }
-    else{
-      result = (await db.getRandom('feast', {type: typeResult}))[0].name;
-    }
     let str = "<:feast:780014200038359040> Feast Gacha Simulator <:feast:780014200038359040>\n";
-    str += `${message.author.toString()} got **${result}**${typeResult.match(/^New/)?` (${typeResult})`:''}\n`;
+    str += `${message.author.toString()} got ${result}\n`;
 
-    return message.channel.send(str)
+    await message.channel.send(str);
 	},
+  async processInteraction(interaction){
+    const result = await getFeast();
+
+    let str = "<:feast:780014200038359040> Feast Gacha Simulator <:feast:780014200038359040>\n";
+    str += `${interaction.user.toString()} got ${result}\n`;
+
+    await interaction.reply(str);
+  }
 };
