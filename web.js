@@ -2,8 +2,15 @@ const http = require('http');
 const express = require('express');
 const app = express();
 
-require('./unsleeper.js')(app);
 require('./ettest.js')(app);
+
+app.get("/", (request, response) => {
+  try{
+    response.sendStatus(200);
+  }catch(e){
+    console.log(e);
+  }
+})
 
 app.get("/tos", (request, response) => {
   try{
