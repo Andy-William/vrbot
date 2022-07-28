@@ -4,8 +4,8 @@ const client = require('./lib/bot.js').client;
 
 const prefix = '!';
 client.on('messageCreate', (message) => {
-  let log = `${message.channel.id}-(${message.author.id}) ${message.author.username}: ${message.content}`
-  if( message.guild ) log = `[${message.guild.id}-${message.guild.name}]` + log
+  // let log = `${message.channel.id}-(${message.author.id}) ${message.author.username}: ${message.content}`
+  // if( message.guild ) log = `[${message.guild.id}-${message.guild.name}]` + log
   const errorHandler = function(err){
     let msg;
     try{
