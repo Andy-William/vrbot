@@ -3,7 +3,6 @@ const { Routes } = require('discord-api-types/v9');
 require('dotenv').config();
 const token = process.env.DISCORD_BOT_TOKEN;
 const clientId = process.env.CLIENT_ID;
-const guildId = process.env.DEV_SERVER_ID;
 
 const fs = require('node:fs');
 const { SlashCommandBuilder } = require('@discordjs/builders');
