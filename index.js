@@ -25,17 +25,17 @@ client.on('messageCreate', (message) => {
   }
   
   try{
-    // console.log(log)
+    console.log(log)
     if( message.author.bot && message.channel.id != process.env.CAKE_CHANNEL_ID ) return;
     
     // pamernoko
-    if( message.channel.id == process.env.PAMERNOKO_CHANNEL_ID ){
-      if( message.author.bot || !message.attachments.first() ) message.delete();
-      else{
-        message.react('👍').then(() => message.react('❤️')).then(() => message.react('😆')).then(() => message.react('😮')).then(() => message.react('😢')).then(() => message.react('😡'))
-      }
-      return;
-    }
+    // if( message.channel.id == process.env.PAMERNOKO_CHANNEL_ID ){
+    //   if( message.author.bot || !message.attachments.first() ) message.delete();
+    //   else{
+    //     message.react('👍').then(() => message.react('❤️')).then(() => message.react('😆')).then(() => message.react('😮')).then(() => message.react('😢')).then(() => message.react('😡'))
+    //   }
+    //   return;
+    // }
     else if( message.channel.id == process.env.RUMAHAN_CHANNEL_ID && !message.author.bot ){
       const attachment =  message.attachments.first()
       if( attachment && attachment.url.match(/\.(jpg|png)$/) ){
@@ -45,10 +45,11 @@ client.on('messageCreate', (message) => {
       }
     }
 
-    if ( message.content.startsWith(prefix) ){
-      const args = message.content.slice(1).split(/ +/); // split arguments
+    
+    const args = message.content.split(/ +/).slice(1); // split arguments
+    if( args.length > 0 ){
       const commandName = args.shift().toLowerCase();    // first argument is command name
-
+  
       let match;
       const command = client.commands.get(commandName) || client.commands.find(cmd => cmd.alias && (match = commandName.match(cmd.alias)));
       if( !command ) return;

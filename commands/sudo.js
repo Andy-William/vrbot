@@ -239,11 +239,12 @@ module.exports = {
         created_at: new Date().getTime()
       }
       updates.push({
-        query: {id: chData.id, level: chData.level, actor: chData.actor},
+        query: {level: chData.level},
         data: chData
       })
-      db.bulkUpdate('valhalla', updates, true).then(()=>interaction.reply(`updated`))
+      db.bulkUpdate('valhalla', updates, true)
     }
     if( updates.length == 0 ) interaction.reply('nothing changed')
+    else interaction.reply(`updated`)
   }
 };
