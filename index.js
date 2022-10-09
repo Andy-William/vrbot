@@ -30,11 +30,7 @@ client.on('messageCreate', (message) => {
 
     // pamernoko
     if( message.channel.id == process.env.PAMERNOKO_CHANNEL_ID ){
-      if( message.author.bot ) message.delete();
-      else{
-        message.react('👍').then(() => message.react('❤️')).then(() => message.react('😆')).then(() => message.react('😮')).then(() => message.react('😢')).then(() => message.react('😡'))
-      }
-      return;
+      message.react('👍').then(() => message.react('❤️')).then(() => message.react('😆')).then(() => message.react('😮')).then(() => message.react('😢')).then(() => message.react('😡'))
     }
     else if( message.channel.id == process.env.RUMAHAN_CHANNEL_ID && !message.author.bot ){
       const attachment =  message.attachments.first()

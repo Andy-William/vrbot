@@ -6,3 +6,4 @@ tmp/*
 .replit
 replit.nix
 pykms_logclient.log
+.nvmrc
