@@ -65,20 +65,22 @@ async function process(steamIDs){
   let saved = (await db.get("ability_arena", {steamID: id}))[0] || {};
 
   // new match is found
-  if( lastMatch.id != saved.lastMatchId ){
+  if( lastMatch.id && lastMatch.id != saved.lastMatchId ){
     saved.lastMatchId = lastMatch.id;
     let message = `<@${IDS[id]}> finished ${lastMatch.place}${OrdSuffix[lastMatch.place]} with ${lastMatch.god}`
     let newRank = await getRank(id);
 
-    // rank change
-    if( saved.medal != newRank.medal ){
-      message += `\nRank changed from ${saved.medal} to ${newRank.medal}${newRank.medal=="Immortal"?" "+newRank.rank:""}`
+    if( newRank.medal ){
+      // rank change
+      if( saved.medal != newRank.medal ){
+        message += `\nRank changed from ${saved.medal} to ${newRank.medal}${newRank.medal=="Immortal"?" "+newRank.rank:""}`
+      }
+      else if ( saved.medal == "Immortal" && saved.rank != newRank.rank ){
+        message += `\nImmortal rank changed from ${saved.rank} to ${newRank.rank}`
+      }
+      saved.medal = newRank.medal
+      saved.rank = newRank.rank
     }
-    else if ( saved.medal == "Immortal" && saved.rank != newRank.rank ){
-      message += `\nImmortal rank changed from ${saved.rank} to ${newRank.rank}`
-    }
-    saved.medal = newRank.medal
-    saved.rank = newRank.rank
 
     await db.update("ability_arena", {steamID: id}, saved, {upsert: true})
 
