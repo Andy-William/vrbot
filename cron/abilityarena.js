@@ -63,7 +63,12 @@ async function process(steamIDs){
   let id = steamIDs.shift();
 
   const lastMatch = await getLastMatch(id);
-  let saved = (await db.get("ability_arena", {steamID: id}))[0] || {};
+  try{
+    let saved = (await db.get("ability_arena", {steamID: id}))[0] || {};
+  } catch {
+    // if database failed, just skip
+    process(steamIDs)
+  }
 
   // new match is found
   if( lastMatch.id && lastMatch.id != saved.lastMatchId ){
