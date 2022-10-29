@@ -63,8 +63,9 @@ async function process(steamIDs){
   let id = steamIDs.shift();
 
   const lastMatch = await getLastMatch(id);
+  let saved;
   try{
-    let saved = (await db.get("ability_arena", {steamID: id}))[0] || {};
+    saved = (await db.get("ability_arena", {steamID: id}))[0] || {};
   } catch {
     // if database failed, just skip
     process(steamIDs)
