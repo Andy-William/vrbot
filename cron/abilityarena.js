@@ -68,7 +68,7 @@ async function process(steamIDs){
     saved = (await db.get("ability_arena", {steamID: id}))[0] || {};
   } catch {
     // if database failed, just skip
-    process(steamIDs)
+    return process(steamIDs)
   }
 
   // new match is found

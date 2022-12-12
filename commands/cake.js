@@ -25,6 +25,7 @@ module.exports = {
 	},
   async processInteraction(interaction){
     const imageUrl = await getCakeUrl();
-    await interaction.reply({files: [imageUrl]});
+    await interaction.deferReply();
+    await interaction.editReply({files: [imageUrl]});
   }
 };

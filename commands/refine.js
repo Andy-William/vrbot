@@ -3,11 +3,11 @@ const { ApplicationCommandOptionType, EmbedBuilder, AttachmentBuilder } = requir
 
 const success = [1,1,1,1,0.5,0.5,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4]
 const broken = [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,1,1,1,1,1]
-const safeItem = [0,0,0,0,1,2,3,4,6,10]
+const safeItem = [0,0,0,0,1,2,3,4,6,10,22,37]
 const fee = [10000,20000,30000,40000,50000,60000,70000,80000,90000,100000,100000,100000,100000,100000,100000]
-const safeFee = [10000,20000,30000,40000,100000,220000,470000,910000,1630000,2740000]
+const safeFee = [10000,20000,30000,40000,100000,220000,470000,910000,1630000,2740000,5250000,9000000]
 const stone = [1,1,1,1,1,1,1,1,1,1,5,5,5,5,5]
-const safeStone = [1,1,1,1,5,10,15,25,50,85]
+const safeStone = [1,1,1,1,5,10,15,25,50,85,135,225]
 
 async function drawImage(startLevel, finishLevel, safe){
   let refine = startLevel
