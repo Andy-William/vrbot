@@ -16,6 +16,7 @@ Simulators
 /extract ➜ Oracle mirror simulator
 /feast ➜ Feast Gacha simulator
 /refine ➜ Refining simulator
+/uars ➜ Ultimate Ancient Relic Shard simulator
 
 Others
 /reminder ➜ Event and maintenance reminder (channel admin only)
