@@ -33,7 +33,8 @@ const themes ={
   }
 }
 
-const mvpLv = [3,6,10,13,16,20,23,26,30,33,36,40,43,46,50,53,56,60,63,66,70,74,77,80,84,87,90,94,97,100]
+// const mvpLv = [3,6,10,13,16,20,23,26,30,33,36,40,43,46,50,53,56,60,63,66,70,74,77,80,84,87,90,94,97,100]
+const mvpLv = [10,20,30,40,50,60,70,80,90,100]
 async function getBosses(url){
   const cached = cache.get(url);
   if( cached ) return cached;
