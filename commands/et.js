@@ -322,14 +322,14 @@ module.exports = {
     }
 	},
   async processInteraction(interaction) {
+    await interaction.deferReply();
     // get et no score
     const dbImage = await db.get('et').then(res => res[0]) || {};
     if( dbImage.created_at > new Date ){
       imageUrl = dbImage.url;
-      return await interaction.reply({files: [imageUrl]})
+      return await interaction.editReply({files: [imageUrl]})
     }
 
-    await interaction.deferReply();
     const from = interaction.options.getInteger('start')||1;
     const to = interaction.options.getInteger('end')||100;
     const theme = interaction.options.getString('theme')||'dark';
