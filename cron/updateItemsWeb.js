@@ -31,8 +31,13 @@ module.exports = {
           if( item.name == res[0].name ){
             matched = true;
             item = dbUpdateData(item)
+
+            if( item.data.price > res.price * 10 ){
+              console.log('wrong price detected', item.name, item.data.price, ", skipping", res.price)
+              item.data.price = res.price
+            }
             db.updateNewer('items', item.query, item.data, item.data.lastRequest).then(res=>{
-              if( res.matchedCount == 1 ) console.log('updated', JSON.stringify(item.query), res.modifiedCount)
+              if( res.matchedCount == 1 ) console.log('updated', JSON.stringify(item.query), JSON.stringify(item.data), res.modifiedCount)
               else console.log('failed', JSON.stringify(item.query))
             }).catch(e=>console.log(e));
           }
