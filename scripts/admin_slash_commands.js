@@ -13,7 +13,11 @@ const data = new SlashCommandBuilder()
   .setDefaultMemberPermissions(0)
   .addSubcommand(subcommand => subcommand
     .setName('vr')
-    .setDescription('set vr'))
+    .setDescription('set vr')
+    .addStringOption(option=> option
+      .setName('url')
+      .setDescription('image url ("reset" to delete)')
+      .setRequired(true)))
   .addSubcommand(subcommand => subcommand
     .setName('oracle')
     .setDescription('set oracle')
