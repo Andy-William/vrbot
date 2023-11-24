@@ -1,6 +1,4 @@
 const db = require('../lib/mongo.js');
-const lastReset = require('../lib/time.js');
-const { ApplicationCommandOptionType } = require('discord.js');
 
 async function getVRUrl(){
   // default image

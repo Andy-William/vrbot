@@ -1,5 +1,4 @@
 const { ApplicationCommandOptionType } = require('discord.js');
-const { findBestMatch } = require('string-similarity');
 
 const odds = {
   "Giant Dragon Scale 🥳": 2,
@@ -16,7 +15,7 @@ const odds = {
   "Elven Sacred Tree 😔": 15
 }
 
-function getFeast(count){
+function getUars(count){
   let result = {};
 
   for( i=0 ; i<count ; i++ ){
@@ -49,7 +48,7 @@ module.exports = {
 	async processMessage(message, args) {
     let count = parseInt(args[0]) || 1;
     count = Math.max(Math.min(count,1000),1);
-    const result = getFeast(count);
+    const result = getUars(count);
 
     let str = "<:UltimateAncientRelicShard:1066583960412495872> Ultimate Ancient Relic Shard opening <:UltimateAncientRelicShard:1066583960412495872>\n";
     if( Object.keys(result).length == 1 ){
@@ -64,7 +63,7 @@ module.exports = {
 	},
   async processInteraction(interaction){
     let count = interaction.options.getInteger('number') || 1;
-    const result = getFeast(count);
+    const result = getUars(count);
 
     let str = "<:UltimateAncientRelicShard:1066583960412495872> Ultimate Ancient Relic Shard opening <:UltimateAncientRelicShard:1066583960412495872>\n";
     if( Object.keys(result).length == 1 ){
