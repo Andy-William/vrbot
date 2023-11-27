@@ -72,7 +72,7 @@ module.exports = {
       str += `${message.author.toString()} got **${card.name}** - priced ${(card.price||0).toLocaleString()}\n`;
     } else {
       const [resultMvp, resultMini] = await bulkGetNolan(count)
-      str += `${message.author.toString()} rolled ${count}x and got:\n **MVP**\n`;
+      str += `${message.author.toString()} rolled ${count}x and got:\n**MVP**\n`;
       for(const [card, num] of Object.entries(resultMvp).sort((a,b)=>b[1]-a[1])){
         str += `${num}x **${card}**\n`
       }
