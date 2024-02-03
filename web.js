@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 
 require('./ettest.js')(app);
+require('./romid.js')(app);
 
 app.get("/", (request, response) => {
   try{
